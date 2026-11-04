@@ -1,0 +1,753 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Admin | Masjid Nuh</title>
+<link rel="icon" href="/assets/mark.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Amiri&family=Public+Sans:wght@400;500;600;700&family=Zilla+Slab:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --deep:#0D2B3A; --lake:#16475A; --copper:#D08A54; --copper-hi:#E6A672; --copper-ink:#8E5225;
+  --mist:#E8EFEE; --foam:#F7FAF9; --ink:#10232D; --ink-2:#4A5F69; --line:#CFDCDB; --line-2:#E2EAE9;
+  --ok:#1D7A5A; --warn:#A35B12; --warn-bg:#FBF0E3; --err:#B23A2E; --err-bg:#FBECEA;
+  --display:"Zilla Slab", Rockwell, Georgia, serif;
+  --body:"Public Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --r:14px;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--mist);color:var(--ink);font:16px/1.5 var(--body)}
+:focus-visible{outline:3px solid var(--copper);outline-offset:2px;border-radius:6px}
+h1,h2,h3{font-family:var(--display);font-weight:600;margin:0;line-height:1.15}
+p{margin:0}
+button,input,select,textarea{font:inherit;color:inherit}
+.vh{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+
+/* top bar */
+.top{background:var(--deep);color:#E9F1F1;position:sticky;top:0;z-index:20}
+.top-in{max-width:1280px;margin:0 auto;padding:0 24px;height:64px;display:flex;align-items:center;gap:16px}
+.top img{height:34px}
+.top .title{font-family:var(--display);font-size:1.2rem;font-weight:600;white-space:nowrap}
+.top .title span{color:#A9C1C6;font-weight:500;margin-left:6px}
+.top .spacer{flex:1}
+.who{display:flex;align-items:center;gap:10px;font-size:.92rem;color:#A9C1C6}
+.avatar{width:32px;height:32px;border-radius:50%;background:var(--copper);color:#1B1007;display:grid;place-items:center;font-weight:700;font-size:.85rem}
+.top a{color:#E9F1F1;text-decoration:none;font-size:.92rem;font-weight:500;padding:8px 12px;border-radius:999px;border:1px solid rgba(255,255,255,.18);white-space:nowrap}
+.top a:hover{border-color:#fff}
+.preview-note{background:var(--warn-bg);color:var(--warn);font-size:.92rem;text-align:center;padding:10px 16px;border-bottom:1px solid #F0D9BD}
+
+/* layout */
+.page{max-width:1280px;margin:0 auto;padding:32px 24px 140px;display:grid;grid-template-columns:minmax(0,1fr) 400px;gap:28px;align-items:start}
+.page-head{grid-column:1/-1;display:flex;justify-content:space-between;align-items:end;gap:16px;flex-wrap:wrap}
+.page-head h1{font-size:2.1rem}
+.page-head p{color:var(--ink-2);margin-top:4px}
+.last{font-size:.9rem;color:var(--ink-2)}
+.last b{color:var(--ink);font-weight:600}
+.main{display:grid;grid-template-columns:minmax(0,1fr);gap:22px;min-width:0}
+.panel{background:#fff;border:1px solid var(--line);border-radius:var(--r);padding:26px}
+.panel-head{display:flex;justify-content:space-between;align-items:start;gap:16px;margin-bottom:18px}
+.panel-head h2{font-size:1.45rem}
+.panel-head p{color:var(--ink-2);font-size:.94rem;margin-top:4px;max-width:62ch}
+
+/* schedule tabs */
+.tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px}
+.tab{border:1.5px solid var(--line);background:#fff;border-radius:10px;padding:9px 14px;cursor:pointer;text-align:left;line-height:1.25}
+.tab b{display:block;font-weight:600;font-size:.94rem}
+.tab small{font-size:.8rem;color:var(--ink-2)}
+.tab[aria-selected=true]{border-color:var(--deep);background:var(--deep);color:#fff}
+.tab[aria-selected=true] small{color:#A9C1C6}
+.tab.add{border-style:dashed;color:var(--ink-2);font-weight:600;font-size:.94rem;display:flex;align-items:center}
+.tab.add:hover{border-color:var(--ink);color:var(--ink)}
+.sched-meta{display:flex;align-items:end;justify-content:space-between;gap:16px;flex-wrap:wrap;padding:16px;background:var(--foam);border:1px solid var(--line-2);border-radius:10px;margin-bottom:6px}
+.field label,.field .lbl{display:block;font-size:.85rem;font-weight:600;color:var(--ink-2);margin-bottom:6px}
+input[type=date],input[type=time],input[type=number],input[type=text],select,textarea{border:1.5px solid var(--line);border-radius:9px;padding:9px 11px;background:#fff;min-height:42px}
+input:focus,select:focus,textarea:focus{border-color:var(--deep);outline:none;box-shadow:0 0 0 3px rgba(13,43,58,.12)}
+.link-btn{background:none;border:0;padding:6px 0;color:var(--err);font-weight:600;font-size:.9rem;cursor:pointer;text-decoration:underline;text-underline-offset:3px}
+.link-btn.neutral{color:var(--ink)}
+
+.rules{width:100%;border-collapse:collapse}
+.rules th{font-size:.82rem;font-weight:600;color:var(--ink-2);text-align:left;padding:12px 10px;border-bottom:1px solid var(--line)}
+.rules td{padding:12px 10px;border-bottom:1px solid var(--line-2);vertical-align:middle}
+.rules tr:last-child td{border-bottom:0}
+.rules .pname{font-family:var(--display);font-weight:600;font-size:1.15rem}
+.rules .pname small{display:block;font-family:"Amiri",serif;font-weight:400;color:var(--ink-2);font-size:.9rem}
+.seg{display:inline-grid;grid-template-columns:1fr 1fr;background:var(--mist);border-radius:9px;padding:3px;white-space:nowrap}
+.seg button{border:0;background:transparent;padding:7px 12px;border-radius:7px;font-size:.88rem;font-weight:600;color:var(--ink-2);cursor:pointer}
+.seg button[aria-pressed=true]{background:#fff;color:var(--ink);box-shadow:0 1px 2px rgba(13,43,58,.2)}
+.val{display:flex;align-items:center;gap:8px;white-space:nowrap}
+.val input[type=number]{width:78px}
+.val span{color:var(--ink-2);font-size:.9rem}
+.result{font-variant-numeric:tabular-nums;font-weight:600;white-space:nowrap}
+.result small{display:block;font-weight:400;color:var(--ink-2);font-size:.8rem}
+.flag{display:inline-block;margin-top:4px;font-size:.78rem;font-weight:600;color:var(--warn);background:var(--warn-bg);padding:2px 8px;border-radius:999px}
+
+/* jumuah */
+.jrows{display:grid;gap:10px}
+.jrow{display:grid;grid-template-columns:1fr 150px auto;gap:10px;align-items:center}
+.add-btn{margin-top:14px;border:1.5px dashed var(--line);background:#fff;border-radius:9px;padding:10px 14px;font-weight:600;cursor:pointer;color:var(--ink-2)}
+.add-btn:hover{border-color:var(--ink);color:var(--ink)}
+.add-btn:disabled{opacity:.5;cursor:not-allowed}
+
+/* announcement */
+.switch{display:flex;align-items:center;gap:12px;cursor:pointer;font-weight:600}
+.switch input{appearance:none;width:46px;height:26px;border-radius:999px;background:#C3D0CF;position:relative;cursor:pointer;transition:background .15s;margin:0;min-height:0;border:0;padding:0}
+.switch input::after{content:"";position:absolute;top:3px;left:3px;width:20px;height:20px;border-radius:50%;background:#fff;transition:transform .15s;box-shadow:0 1px 2px rgba(0,0,0,.2)}
+.switch input:checked{background:var(--ok)}
+.switch input:checked::after{transform:translateX(20px)}
+textarea{width:100%;min-height:84px;resize:vertical;margin-top:14px;line-height:1.45}
+.count{font-size:.82rem;color:var(--ink-2);text-align:right;margin-top:4px}
+.count.over{color:var(--err);font-weight:600}
+
+/* calculation */
+.calc-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}
+.calc-grid select,.calc-grid input{width:100%;max-width:100%}
+.radios{display:flex;gap:18px;padding-top:8px}
+.radios label{display:flex;gap:8px;align-items:center;font-weight:500;color:var(--ink);font-size:.95rem;margin:0}
+.adj{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:10px;margin-top:20px}
+.adj input{width:100%;min-width:0}
+details.more{margin-top:18px;border-top:1px solid var(--line-2);padding-top:14px}
+details.more summary{cursor:pointer;font-weight:600;font-size:.94rem}
+details.more p{color:var(--ink-2);font-size:.9rem;margin-top:8px}
+
+/* history */
+.hist{list-style:none;margin:0;padding:0}
+.hist li{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid var(--line-2);font-size:.94rem}
+.hist li:last-child{border-bottom:0}
+.hist b{font-weight:600}
+.hist time{color:var(--ink-2);display:block;font-size:.85rem}
+.empty{color:var(--ink-2);font-size:.94rem}
+.badge{font-size:.78rem;font-weight:600;color:var(--ink-2);background:var(--mist);border-radius:999px;padding:3px 10px;white-space:nowrap}
+.add-admin{display:flex;gap:10px;margin-top:16px}
+.add-admin input{flex:1;min-width:0}
+.btn-ink{background:var(--deep);color:#fff}
+.btn-ink:hover{background:var(--lake)}
+.form-msg{margin-top:10px;font-size:.9rem;color:var(--err);min-height:1.3em}
+.form-msg.ok{color:var(--ok)}
+
+/* preview */
+.side{position:sticky;top:88px;display:grid;gap:16px}
+.pv{background:var(--deep);color:#E9F1F1;border-radius:var(--r);padding:22px;overflow:hidden}
+.pv-head{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:14px}
+.pv-head h2{font-size:1.3rem;color:#fff}
+.pv input[type=date]{background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.2);color:#fff;color-scheme:dark;min-height:38px;padding:6px 10px}
+.pv-sub{font-size:.85rem;color:#A9C1C6;margin-bottom:12px}
+.pv table{width:100%;border-collapse:collapse;font-variant-numeric:tabular-nums}
+.pv th{font-size:.8rem;font-weight:600;color:#A9C1C6;text-align:right;padding:6px 0;border-bottom:1px solid rgba(255,255,255,.12)}
+.pv th:first-child,.pv td:first-child{text-align:left}
+.pv td{padding:9px 0;text-align:right;border-bottom:1px solid rgba(255,255,255,.07)}
+.pv td:first-child{font-family:var(--display);font-weight:600;font-size:1.05rem}
+.pv td.iq{color:var(--copper-hi);font-weight:700}
+.pv tr.sun td{color:#A9C1C6;font-size:.92rem}
+.pv tr.sun td:first-child{font-family:var(--body);font-weight:400;font-size:.92rem}
+.pv .jm{margin-top:14px;padding-top:12px;border-top:1px solid rgba(255,255,255,.12);display:flex;flex-wrap:wrap;gap:6px 18px;font-size:.92rem;color:#A9C1C6}
+.pv .jm b{color:#fff;font-weight:600}
+.pv-warn{margin-top:12px;font-size:.86rem;background:rgba(230,166,114,.14);color:#F4C9A4;border-radius:9px;padding:10px 12px}
+.pv-warn p+p{margin-top:6px}
+.week{background:#fff;border:1px solid var(--line);border-radius:var(--r);padding:18px 18px 10px}
+.week h3{font-size:1.1rem;margin-bottom:8px}
+.week table{width:100%;border-collapse:collapse;font-size:.85rem;font-variant-numeric:tabular-nums}
+.week th{color:var(--ink-2);font-weight:600;text-align:right;padding:6px 2px;border-bottom:1px solid var(--line)}
+.week td{text-align:right;padding:7px 2px;border-bottom:1px solid var(--line-2)}
+.week th:first-child,.week td:first-child{text-align:left}
+.week tr.change td{background:var(--warn-bg)}
+.week tr.fri td:first-child{font-weight:700}
+
+/* save bar */
+.savebar{position:fixed;left:0;right:0;bottom:0;z-index:30;transform:translateY(110%);visibility:hidden;transition:transform .2s ease,visibility 0s linear .2s}
+.savebar.show{transform:none;visibility:visible;transition:transform .2s ease,visibility 0s}
+.savebar-in{max-width:1280px;margin:0 auto 16px;padding:0 24px}
+.savebar-box{background:var(--ink);color:#fff;border-radius:14px;padding:14px 16px 14px 22px;display:flex;align-items:center;gap:14px;box-shadow:0 14px 40px rgba(5,20,28,.35)}
+.savebar-box p{flex:1;font-weight:500}
+.btn{border:0;border-radius:999px;padding:11px 20px;font-weight:600;cursor:pointer}
+.btn-copper{background:var(--copper);color:#1B1007}
+.btn-copper:hover{background:var(--copper-hi)}
+.btn-copper:disabled{opacity:.6;cursor:wait}
+.btn-ghost{background:transparent;color:#fff;border:1px solid rgba(255,255,255,.3)}
+.btn-ghost:hover{border-color:#fff}
+.errors{margin-top:10px;background:var(--err-bg);color:var(--err);border-radius:10px;padding:12px 16px;font-size:.9rem;display:none}
+.errors.show{display:block}
+.errors ul{margin:6px 0 0;padding-left:18px}
+.toast{position:fixed;left:50%;bottom:24px;transform:translate(-50%,140%);opacity:0;visibility:hidden;background:var(--ok);color:#fff;padding:13px 20px;border-radius:12px;font-weight:600;z-index:40;transition:transform .25s ease,opacity .25s,visibility .25s;box-shadow:0 10px 30px rgba(5,20,28,.3);max-width:calc(100vw - 32px)}
+body:has(.savebar.show) .toast{bottom:110px}
+.toast.show{transform:translate(-50%,0);opacity:1;visibility:visible}
+.loading{grid-column:1/-1;text-align:center;padding:80px 0;color:var(--ink-2)}
+
+@media (max-width:1060px){
+  .page{grid-template-columns:minmax(0,1fr)}
+  .side{position:static;order:-1}
+}
+@media (max-width:680px){
+  .top-in{padding:0 14px;gap:10px}
+  .top .title span,.who .email{display:none}
+  .page{padding:20px 14px 150px;gap:18px}
+  .page-head h1{font-size:1.7rem}
+  .panel{padding:18px}
+  .rules,.rules tbody{display:block;width:100%}
+  .rules thead{display:none}
+  .rules tr{display:grid;grid-template-columns:1fr auto;gap:8px 12px;padding:14px 0;border-bottom:1px solid var(--line-2)}
+  .rules tr:last-child{border-bottom:0}
+  .rules td{padding:0;border:0}
+  .rules td.c-rule{grid-column:1/-1}
+  .rules td.c-val{grid-column:1/2}
+  .rules td.c-res{grid-column:2/3;grid-row:1;text-align:right}
+  .calc-grid{grid-template-columns:minmax(0,1fr)}
+  .adj{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .jrow{grid-template-columns:minmax(0,1fr) 146px}
+  .top a{padding:7px 10px;font-size:.86rem}
+  .top img{height:30px}
+  .jrow input{min-width:0;width:100%}
+  .rules tr{grid-template-columns:minmax(0,1fr) auto}
+  .jrow .link-btn{grid-column:1/-1;justify-self:start;padding:0}
+  .savebar-in{padding:0 10px;margin-bottom:10px}
+  .savebar-box{flex-wrap:wrap;padding:14px}
+  .savebar-box p{flex-basis:100%}
+  .savebar-box .btn{flex:1}
+  .add-admin{flex-direction:column}
+}
+@media (prefers-reduced-motion:reduce){.savebar,.toast{transition:none}}
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="top-in">
+    <img src="/assets/mark.png" alt="">
+    <p class="title">Masjid Nuh <span>Admin</span></p>
+    <span class="spacer"></span>
+    <div class="who" id="who" hidden><span class="email" id="whoEmail"></span><span class="avatar" id="whoAvatar" aria-hidden="true"></span></div>
+    <a href="/" target="_blank" rel="noopener">View site</a>
+    <a href="/auth/logout" id="signout">Sign out</a>
+  </div>
+</header>
+<div class="preview-note" id="previewNote" hidden>Preview mode. You’re not connected to the live site, so changes are only saved in this browser.</div>
+
+<main class="page" id="page">
+  <p class="loading" id="loading">Loading settings…</p>
+</main>
+
+<div class="savebar" id="savebar" role="region" aria-label="Unsaved changes">
+  <div class="savebar-in">
+    <div class="savebar-box">
+      <p id="saveText">You have unsaved changes.</p>
+      <button class="btn btn-ghost" id="discard" type="button">Discard</button>
+      <button class="btn btn-copper" id="save" type="button">Save changes</button>
+    </div>
+    <div class="errors" id="errors" role="alert"></div>
+  </div>
+</div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<template id="tpl">
+  <div class="page-head">
+    <div>
+      <h1>Prayer times</h1>
+      <p>Changes appear on the website within a minute of saving.</p>
+    </div>
+    <p class="last" id="lastSaved"></p>
+  </div>
+
+  <div class="main">
+    <section class="panel" aria-labelledby="iq-h">
+      <div class="panel-head">
+        <div>
+          <h2 id="iq-h">Iqamah times</h2>
+          <p>Set each iqamah as minutes after the adhan, or as a fixed clock time. To change times on a future date, such as when the clocks change or for Ramadan, schedule a change.</p>
+        </div>
+      </div>
+      <div class="tabs" role="tablist" id="tabs"></div>
+      <div class="sched-meta">
+        <div class="field">
+          <label for="schedFrom">Starts on</label>
+          <input type="date" id="schedFrom">
+        </div>
+        <button type="button" class="link-btn" id="schedDelete">Delete this schedule</button>
+      </div>
+      <table class="rules">
+        <thead><tr><th scope="col">Prayer</th><th scope="col">Rule</th><th scope="col">Setting</th><th scope="col" id="resultHead">Iqamah</th></tr></thead>
+        <tbody id="rules"></tbody>
+      </table>
+    </section>
+
+    <section class="panel" aria-labelledby="j-h">
+      <div class="panel-head"><div><h2 id="j-h">Jumu’ah</h2><p>Shown every day on the website. Add a second khutbah if you hold two Jumu’ah prayers.</p></div></div>
+      <div class="jrows" id="jrows"></div>
+      <button type="button" class="add-btn" id="jAdd">Add a time</button>
+    </section>
+
+    <section class="panel" aria-labelledby="a-h">
+      <div class="panel-head"><div><h2 id="a-h">Announcement</h2><p>A short message shown at the top of every page, for things like Eid prayer times or a closure.</p></div></div>
+      <label class="switch"><input type="checkbox" id="annOn"> <span id="annOnText">Not shown on the site</span></label>
+      <label for="annText" class="vh">Announcement text</label>
+      <textarea id="annText" maxlength="280" placeholder="Eid al-Adha prayer: 8:30 am at the masjid. Please arrive early."></textarea>
+      <p class="count" id="annCount">0 / 280</p>
+    </section>
+
+    <section class="panel" aria-labelledby="c-h">
+      <div class="panel-head"><div><h2 id="c-h">Adhan calculation</h2><p>Adhan times are calculated for 35 Queen St, Fort Erie. Most North American masjids use ISNA.</p></div></div>
+      <div class="calc-grid">
+        <div class="field"><label for="method">Calculation method</label><select id="method"></select></div>
+        <div class="field"><span class="lbl">Asr time</span>
+          <div class="radios" role="radiogroup" aria-label="Asr time">
+            <label><input type="radio" name="asr" value="standard"> Standard</label>
+            <label><input type="radio" name="asr" value="hanafi"> Hanafi</label>
+          </div>
+        </div>
+        <div class="field"><label for="ramadan">Expected first day of Ramadan</label><input type="date" id="ramadan"></div>
+      </div>
+      <details class="more">
+        <summary>Fine-tune adhan times</summary>
+        <p>Add or subtract minutes from the calculated adhan, for example to match a local timetable.</p>
+        <div class="adj" id="adj"></div>
+      </details>
+    </section>
+
+    <section class="panel" aria-labelledby="h-h">
+      <div class="panel-head"><div><h2 id="h-h">Recent changes</h2><p>Every save is recorded. Load an earlier version to review it, then save to restore it.</p></div></div>
+      <ul class="hist" id="hist"><li class="empty">No saved changes yet.</li></ul>
+    </section>
+
+    <section class="panel" aria-labelledby="ad-h">
+      <div class="panel-head"><div><h2 id="ad-h">Admins</h2><p>People who can sign in here with their Microsoft account. Work, school and personal accounts such as Outlook.com all work. Changes here take effect right away, without the Save button.</p></div></div>
+      <ul class="hist" id="admins"><li class="empty">Loading…</li></ul>
+      <form class="add-admin" id="adminForm" novalidate>
+        <label for="adminEmail" class="vh">Email address of the new admin</label>
+        <input type="email" id="adminEmail" placeholder="name@outlook.com" autocomplete="off">
+        <button type="submit" class="btn btn-ink">Add admin</button>
+      </form>
+      <p class="form-msg" id="adminMsg" role="status"></p>
+    </section>
+  </div>
+
+  <aside class="side" aria-label="Preview">
+    <div class="pv">
+      <div class="pv-head">
+        <h2>Preview</h2>
+        <label class="vh" for="pvDate">Preview date</label>
+        <input type="date" id="pvDate">
+      </div>
+      <p class="pv-sub" id="pvSub"></p>
+      <table><thead><tr><th>Prayer</th><th>Adhan</th><th>Iqamah</th></tr></thead><tbody id="pvBody"></tbody></table>
+      <div class="jm" id="pvJm"></div>
+      <div class="pv-warn" id="pvWarn" hidden></div>
+    </div>
+    <div class="week">
+      <h3>Iqamah for the next 7 days</h3>
+      <table><thead><tr><th>Date</th><th>Fajr</th><th>Dhuhr</th><th>Asr</th><th>Mgh</th><th>Isha</th></tr></thead><tbody id="wkBody"></tbody></table>
+    </div>
+  </aside>
+</template>
+
+<script src="/js/masjid.js"></script>
+<script>
+(async function () {
+  const M = window.Masjid;
+  const $ = id => document.getElementById(id);
+  const LS_KEY = 'masjid-nuh-admin-preview';
+  let previewMode = false, user = null, state, savedJSON, activeIdx = 0;
+
+  /* ---------- who is signed in ---------- */
+  try {
+    const r = await fetch('/api/me', { cache: 'no-store' });
+    if (!r.ok) throw 0;
+    const me = await r.json();
+    if (!me.signedIn) { location.href = '/auth/login?next=/admin/'; return; }
+    user = { userDetails: me.email, name: me.name, isOwner: me.isOwner };
+  } catch (e) { previewMode = true; user = { userDetails: 'preview@masjidnuh.ca', name: 'Preview', isOwner: true }; }
+
+  if (user) {
+    $('who').hidden = false;
+    $('whoEmail').textContent = user.userDetails;
+    $('whoAvatar').textContent = (user.userDetails || '?').slice(0, 1).toUpperCase();
+  }
+  if (previewMode) { $('previewNote').hidden = false; $('signout').hidden = true; }
+
+  /* ---------- load settings ---------- */
+  if (previewMode) {
+    let s = null; try { s = JSON.parse(localStorage.getItem(LS_KEY)); } catch (e) {}
+    state = M.normalize(s);
+  } else {
+    const r = await M.load('/api/settings');
+    state = r.settings;
+  }
+  savedJSON = JSON.stringify(strip(state));
+  let savedMeta = { updatedBy: state.updatedBy, updatedAt: state.updatedAt };
+  activeIdx = indexInEffect();
+
+  $('page').innerHTML = '';
+  $('page').appendChild($('tpl').content.cloneNode(true));
+
+  const today = M.todayParts();
+  const todayStr = M.ymd(today.y, today.m, today.d);
+  $('pvDate').value = todayStr;
+
+  /* ---------- helpers ---------- */
+  function strip(s) { const c = M.clone(s); delete c.updatedBy; delete c.updatedAt; return c; }
+  function indexInEffect(dateStr) {
+    const t = dateStr || M.ymd(M.todayParts().y, M.todayParts().m, M.todayParts().d);
+    let idx = 0; state.schedules.forEach((s, i) => { if (s.from <= t) idx = i; }); return idx;
+  }
+  function longDate(str, opts) {
+    const [y, m, d] = str.split('-').map(Number);
+    return new Date(Date.UTC(y, m - 1, d, 12)).toLocaleDateString('en-CA', Object.assign({ timeZone: 'UTC', month: 'short', day: 'numeric', year: 'numeric' }, opts || {}));
+  }
+  function to24(minutes) { const h = Math.floor(minutes / 60) % 24, m = minutes % 60; return String(h).padStart(2, '0') + ':' + String(m).padStart(2, '0'); }
+  function dirty() { return JSON.stringify(strip(state)) !== savedJSON; }
+  function changed() {
+    $('savebar').classList.toggle('show', dirty());
+    if (!dirty()) $('errors').classList.remove('show');
+    renderPreview();
+  }
+
+  /* ---------- iqamah schedules ---------- */
+  function renderTabs() {
+    const inEffect = indexInEffect();
+    $('tabs').innerHTML = '';
+    state.schedules.forEach((s, i) => {
+      const b = document.createElement('button');
+      b.type = 'button'; b.className = 'tab'; b.setAttribute('role', 'tab');
+      b.setAttribute('aria-selected', i === activeIdx);
+      const status = i === inEffect ? 'In effect now' : (s.from > todayStr ? 'Upcoming' : 'Replaced');
+      b.innerHTML = `<b>From ${longDate(s.from)}</b><small>${status}</small>`;
+      b.addEventListener('click', () => { activeIdx = i; renderSchedule(); if (s.from > todayStr) $('pvDate').value = s.from; else $('pvDate').value = todayStr; renderPreview(); });
+      $('tabs').appendChild(b);
+    });
+    const add = document.createElement('button');
+    add.type = 'button'; add.className = 'tab add'; add.textContent = 'Schedule a change';
+    add.disabled = state.schedules.length >= 40;
+    add.addEventListener('click', () => {
+      // Start next Monday, copying the schedule that would be in force then
+      let d = M.addDays(today.y, today.m, today.d, 1);
+      let from = M.ymd(d.y, d.m, d.d);
+      while (state.schedules.some(s => s.from === from)) { d = M.addDays(d.y, d.m, d.d, 1); from = M.ymd(d.y, d.m, d.d); }
+      const base = M.scheduleFor(state, from);
+      state.schedules.push({ from, iqamah: M.clone(base.iqamah) });
+      state.schedules.sort((a, b) => a.from.localeCompare(b.from));
+      activeIdx = state.schedules.findIndex(s => s.from === from);
+      $('pvDate').value = from;
+      renderSchedule(); changed();
+      $('schedFrom').focus();
+    });
+    $('tabs').appendChild(add);
+  }
+
+  function renderSchedule() {
+    renderTabs();
+    const s = state.schedules[activeIdx];
+    $('schedFrom').value = s.from;
+    $('schedDelete').hidden = state.schedules.length === 1;
+    $('rules').innerHTML = '';
+    M.PRAYERS.forEach(k => {
+      const rule = s.iqamah[k];
+      const tr = document.createElement('tr');
+      tr.innerHTML = `
+        <td class="c-name"><span class="pname">${M.NAMES[k]}<small lang="ar">${M.AR[k]}</small></span></td>
+        <td class="c-rule"><div class="seg" role="group" aria-label="${M.NAMES[k]} iqamah rule">
+          <button type="button" data-t="after" aria-pressed="${rule.type === 'after'}">After adhan</button>
+          <button type="button" data-t="fixed" aria-pressed="${rule.type === 'fixed'}">Fixed time</button></div></td>
+        <td class="c-val"><div class="val"></div></td>
+        <td class="c-res"><div class="result" data-k="${k}"></div></td>`;
+      const val = tr.querySelector('.val');
+      function drawVal() {
+        val.innerHTML = '';
+        if (rule.type === 'after') {
+          val.innerHTML = `<input type="number" min="0" max="120" step="1" aria-label="${M.NAMES[k]} minutes after adhan" value="${rule.value}"><span>min after adhan</span>`;
+          val.querySelector('input').addEventListener('input', e => {
+            const n = parseInt(e.target.value, 10); rule.value = isNaN(n) ? 0 : Math.max(0, Math.min(120, n)); changed();
+          });
+        } else {
+          val.innerHTML = `<input type="time" aria-label="${M.NAMES[k]} fixed iqamah time" value="${rule.value}">`;
+          val.querySelector('input').addEventListener('input', e => { if (e.target.value) { rule.value = e.target.value; changed(); } });
+        }
+      }
+      drawVal();
+      tr.querySelector('.seg').addEventListener('click', e => {
+        const b = e.target.closest('button'); if (!b || b.dataset.t === rule.type) return;
+        // Convert using the preview date so the time doesn't jump
+        const d = previewDay();
+        if (b.dataset.t === 'fixed') { rule.type = 'fixed'; rule.value = M.fmt24(d.iqamah[k]); }
+        else { rule.type = 'after'; rule.value = Math.max(0, Math.min(120, Math.round((d.iqamah[k] - d.adhan[k]) / 60000))); }
+        tr.querySelectorAll('.seg button').forEach(x => x.setAttribute('aria-pressed', x === b));
+        drawVal(); changed();
+      });
+      $('rules').appendChild(tr);
+    });
+    renderPreview();
+  }
+
+  $('schedFrom').addEventListener('change', e => {
+    const v = e.target.value; const s = state.schedules[activeIdx];
+    if (!v) { e.target.value = s.from; return; }
+    if (state.schedules.some((x, i) => i !== activeIdx && x.from === v)) { toast('Another schedule already starts on that date.', true); e.target.value = s.from; return; }
+    s.from = v; state.schedules.sort((a, b) => a.from.localeCompare(b.from));
+    activeIdx = state.schedules.indexOf(s);
+    if (v > todayStr) $('pvDate').value = v;
+    renderSchedule(); changed();
+  });
+  $('schedDelete').addEventListener('click', () => {
+    if (state.schedules.length < 2) return;
+    const s = state.schedules[activeIdx];
+    if (!confirm(`Delete the schedule starting ${longDate(s.from)}? This takes effect when you save.`)) return;
+    state.schedules.splice(activeIdx, 1);
+    activeIdx = Math.min(activeIdx, state.schedules.length - 1);
+    renderSchedule(); changed();
+  });
+
+  /* ---------- jumuah ---------- */
+  function renderJumuah() {
+    $('jrows').innerHTML = '';
+    state.jumuah.forEach((j, i) => {
+      const row = document.createElement('div'); row.className = 'jrow';
+      row.innerHTML = `<input type="text" maxlength="40" aria-label="Name for Jumu’ah time ${i + 1}" value="">
+        <input type="time" aria-label="Time for Jumu’ah time ${i + 1}" value="${j.time}">
+        <button type="button" class="link-btn">Remove</button>`;
+      const [lbl, time, rm] = row.querySelectorAll('input, button');
+      lbl.value = j.label;
+      lbl.addEventListener('input', () => { j.label = lbl.value; changed(); });
+      time.addEventListener('input', () => { if (time.value) { j.time = time.value; changed(); } });
+      rm.addEventListener('click', () => { state.jumuah.splice(i, 1); renderJumuah(); changed(); });
+      $('jrows').appendChild(row);
+    });
+    $('jAdd').disabled = state.jumuah.length >= 6;
+  }
+  $('jAdd').addEventListener('click', () => {
+    const last = state.jumuah[state.jumuah.length - 1];
+    const t = last ? to24(Math.min(23 * 60, (+last.time.slice(0, 2)) * 60 + (+last.time.slice(3)) + 60)) : '13:15';
+    state.jumuah.push({ label: state.jumuah.length ? 'Second Jumu’ah' : 'Khutbah', time: t });
+    renderJumuah(); changed();
+    const ins = $('jrows').querySelectorAll('input[type=text]'); ins[ins.length - 1].select();
+  });
+
+  /* ---------- announcement ---------- */
+  function renderAnnouncement() {
+    $('annOn').checked = state.announcement.on;
+    $('annText').value = state.announcement.text;
+    annMeta();
+  }
+  function annMeta() {
+    const n = $('annText').value.length;
+    $('annCount').textContent = `${n} / 280`;
+    $('annCount').classList.toggle('over', n > 280);
+    $('annOnText').textContent = state.announcement.on ? 'Shown on the site' : 'Not shown on the site';
+  }
+  $('annOn').addEventListener('change', e => {
+    if (e.target.checked && !$('annText').value.trim()) { e.target.checked = false; $('annText').focus(); toast('Write the announcement first, then turn it on.', true); return; }
+    state.announcement.on = e.target.checked; annMeta(); changed();
+  });
+  $('annText').addEventListener('input', e => {
+    state.announcement.text = e.target.value;
+    if (!e.target.value.trim() && state.announcement.on) { state.announcement.on = false; $('annOn').checked = false; }
+    annMeta(); changed();
+  });
+
+  /* ---------- calculation ---------- */
+  function renderCalc() {
+    $('method').innerHTML = Object.entries(M.METHODS).map(([k, v]) => `<option value="${k}">${v.label} (Fajr ${v.fajr}°, Isha ${v.isha}°)</option>`).join('');
+    $('method').value = state.method;
+    document.querySelectorAll('input[name=asr]').forEach(r => r.checked = r.value === state.asr);
+    $('ramadan').value = state.ramadanStart || '';
+    $('adj').innerHTML = M.ALL.map(k => `<div class="field"><label for="adj-${k}">${M.NAMES[k]}</label><input type="number" id="adj-${k}" min="-30" max="30" step="1" value="${state.adjust[k] || 0}"></div>`).join('');
+    M.ALL.forEach(k => $('adj-' + k).addEventListener('input', e => {
+      const n = parseInt(e.target.value, 10); state.adjust[k] = isNaN(n) ? 0 : Math.max(-30, Math.min(30, n)); changed();
+    }));
+  }
+  $('method').addEventListener('change', e => { state.method = e.target.value; changed(); });
+  document.querySelectorAll('input[name=asr]').forEach(r => r.addEventListener('change', () => { state.asr = r.value; changed(); }));
+  $('ramadan').addEventListener('change', e => { state.ramadanStart = e.target.value || null; changed(); });
+
+  /* ---------- preview ---------- */
+  function previewDay() {
+    const v = $('pvDate').value || todayStr; const [y, m, d] = v.split('-').map(Number);
+    return M.day(state, y, m, d);
+  }
+  function renderPreview() {
+    const d = previewDay();
+    const [y, m, dd] = d.date.split('-').map(Number);
+    $('pvSub').textContent = longDate(d.date, { weekday: 'long', month: 'long' }) + (d.date === todayStr ? ' (today)' : '') + `. Using the schedule from ${longDate(d.schedule.from)}.`;
+    $('pvBody').innerHTML = M.ALL.map(k => k === 'sunrise'
+      ? `<tr class="sun"><td>Sunrise</td><td>${M.fmt(d.adhan.sunrise)}</td><td></td></tr>`
+      : `<tr><td>${M.NAMES[k]}</td><td>${M.fmt(d.adhan[k])}</td><td class="iq">${M.fmt(d.iqamah[k])}</td></tr>`).join('');
+    $('pvJm').innerHTML = d.jumuah.length ? 'Jumu’ah: ' + d.jumuah.map(j => `<span>${escapeHtml(j.label)} <b>${M.fmt(j.at)}</b></span>`).join('') : 'No Jumu’ah times set.';
+
+    const warns = [];
+    Object.entries(d.warnings).forEach(([k, w]) => {
+      if (w === 'before-adhan') warns.push(`${M.NAMES[k]}: the fixed iqamah is before the adhan on this date, so the site will show the adhan time instead.`);
+      if (w === 'after-next') warns.push(`${M.NAMES[k]}: the fixed iqamah is after the next adhan on this date.`);
+    });
+    if (d.jumuah[0] && d.jumuah[0].at < d.adhan.dhuhr) warns.push(`Jumu’ah: ${escapeHtml(d.jumuah[0].label)} starts before the Dhuhr adhan (${M.fmt(d.adhan.dhuhr)}) on this date.`);
+    $('pvWarn').hidden = !warns.length;
+    $('pvWarn').innerHTML = warns.map(w => `<p>${w}</p>`).join('');
+
+    // result column in the editor reflects the preview date when it uses the active schedule
+    const usesActive = d.schedule === state.schedules[activeIdx];
+    $('resultHead').textContent = usesActive ? `Iqamah on ${longDate(d.date, { year: undefined })}` : 'Iqamah';
+    document.querySelectorAll('.result').forEach(el => {
+      const k = el.dataset.k;
+      if (!usesActive) { el.innerHTML = `<small>Pick a date in this schedule to preview</small>`; return; }
+      const w = d.warnings[k];
+      el.innerHTML = `${M.fmt(d.iqamah[k])}<small>Adhan ${M.fmt(d.adhan[k])}</small>${w ? `<span class="flag">${w === 'before-adhan' ? 'Before adhan' : 'After next adhan'}</span>` : ''}`;
+    });
+
+    // 7 days
+    let html = '', prevFrom = null;
+    for (let i = 0; i < 7; i++) {
+      const t = M.addDays(y, m, dd, i), day = M.day(state, t.y, t.m, t.d);
+      const wd = new Date(Date.UTC(t.y, t.m - 1, t.d, 12)).toLocaleDateString('en-CA', { weekday: 'short', timeZone: 'UTC' });
+      const cls = [(prevFrom && prevFrom !== day.schedule.from) ? 'change' : '', wd === 'Fri' ? 'fri' : ''].join(' ');
+      prevFrom = day.schedule.from;
+      html += `<tr class="${cls}"><td>${wd} ${t.d}</td>` + M.PRAYERS.map(k => `<td>${M.fmt(day.iqamah[k]).replace(/ [ap]m/, '')}</td>`).join('') + '</tr>';
+    }
+    $('wkBody').innerHTML = html;
+  }
+  $('pvDate').addEventListener('change', () => {
+    const v = $('pvDate').value; if (!v) { $('pvDate').value = todayStr; }
+    renderPreview();
+  });
+
+  /* ---------- history ---------- */
+  async function loadHistory() {
+    let items = [];
+    if (previewMode) { try { items = JSON.parse(localStorage.getItem(LS_KEY + '-hist')) || []; } catch (e) {} }
+    else { try { const r = await fetch('/api/history', { cache: 'no-store' }); if (r.ok) items = await r.json(); } catch (e) {} }
+    if (!items.length) { $('hist').innerHTML = '<li class="empty">No saved changes yet.</li>'; return; }
+    $('hist').innerHTML = '';
+    items.forEach((h, i) => {
+      const li = document.createElement('li');
+      const when = niceWhen(h.updatedAt, true);
+      li.innerHTML = `<div><b></b><time datetime="${h.updatedAt}">${when}</time></div>`;
+      li.querySelector('b').textContent = h.updatedBy || 'Unknown';
+      if (i === 0) { const s = document.createElement('span'); s.className = 'empty'; s.textContent = 'Live now'; li.appendChild(s); }
+      else {
+        const b = document.createElement('button'); b.type = 'button'; b.className = 'link-btn neutral'; b.textContent = 'Load this version';
+        b.addEventListener('click', () => { state = M.normalize(Object.assign({}, h.settings, savedMeta)); activeIdx = indexInEffect(); renderAll(); changed(); toast('Earlier version loaded. Save to make it live.'); });
+        li.appendChild(b);
+      }
+      $('hist').appendChild(li);
+    });
+  }
+
+  function renderLast() {
+    if (!state.updatedAt) { $('lastSaved').textContent = previewMode ? '' : 'Using built-in defaults. Nothing has been saved yet.'; return; }
+    const when = niceWhen(state.updatedAt, false);
+    $('lastSaved').innerHTML = `Last saved ${when} by <b></b>`;
+    $('lastSaved').querySelector('b').textContent = state.updatedBy || 'unknown';
+  }
+
+  function renderAll() { renderSchedule(); renderJumuah(); renderAnnouncement(); renderCalc(); renderPreview(); renderLast(); }
+
+  /* ---------- save ---------- */
+  function clientErrors() {
+    const e = [];
+    state.jumuah.forEach((j, i) => { if (!j.label.trim()) e.push(`Jumu’ah time ${i + 1} needs a name.`); });
+    if (state.announcement.text.length > 280) e.push('The announcement is longer than 280 characters.');
+    return e;
+  }
+  function showErrors(list) {
+    $('errors').innerHTML = `<strong>Couldn’t save.</strong><ul>${list.map(x => `<li>${escapeHtml(x)}</li>`).join('')}</ul>`;
+    $('errors').classList.add('show');
+  }
+  $('save').addEventListener('click', async () => {
+    const ce = clientErrors(); if (ce.length) return showErrors(ce);
+    $('save').disabled = true; $('save').textContent = 'Saving…';
+    try {
+      const body = strip(state);
+      let saved;
+      if (previewMode) {
+        saved = Object.assign(body, { updatedBy: user.userDetails, updatedAt: new Date().toISOString() });
+        try {
+          localStorage.setItem(LS_KEY, JSON.stringify(saved));
+          let h = []; try { h = JSON.parse(localStorage.getItem(LS_KEY + '-hist')) || []; } catch (e) {}
+          h.unshift({ updatedBy: saved.updatedBy, updatedAt: saved.updatedAt, settings: saved });
+          localStorage.setItem(LS_KEY + '-hist', JSON.stringify(h.slice(0, 15)));
+        } catch (e) { /* storage blocked in this preview; keep changes for this session only */ }
+      } else {
+        const r = await fetch('/api/settings', { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
+        const j = await r.json().catch(() => ({}));
+        if (r.status === 401) { showErrors(['Your sign-in has expired. Open the dashboard in a new tab to sign in again, then save here.']); return; }
+        if (r.status === 403) { showErrors(['Your account is not an admin for this site.']); return; }
+        if (!r.ok) { showErrors(j.details || [j.error || 'Something went wrong. Try again.']); return; }
+        saved = j;
+      }
+      state = M.normalize(saved);
+      savedJSON = JSON.stringify(strip(state));
+      savedMeta = { updatedBy: state.updatedBy, updatedAt: state.updatedAt };
+      renderLast(); changed(); loadHistory();
+      toast('Changes saved. The website will update within a minute.');
+    } catch (e) {
+      showErrors(['Couldn’t reach the server. Check your connection and try again.']);
+    } finally {
+      $('save').disabled = false; $('save').textContent = 'Save changes';
+    }
+  });
+  $('discard').addEventListener('click', () => {
+    state = M.normalize(Object.assign(JSON.parse(savedJSON), savedMeta));
+    activeIdx = Math.min(activeIdx, state.schedules.length - 1);
+    renderAll(); changed(); toast('Changes discarded.');
+  });
+  window.addEventListener('beforeunload', e => { if (dirty()) { e.preventDefault(); e.returnValue = ''; } });
+
+  let tt;
+  function toast(msg, warn) {
+    const t = $('toast'); t.textContent = msg; t.style.background = warn ? 'var(--warn)' : 'var(--ok)';
+    t.classList.add('show'); clearTimeout(tt); tt = setTimeout(() => t.classList.remove('show'), 3200);
+  }
+  function niceWhen(iso, withYear) {
+    const d = new Date(iso);
+    const date = d.toLocaleDateString('en-CA', Object.assign({ timeZone: M.TZ, month: 'short', day: 'numeric' }, withYear ? { year: 'numeric' } : {}));
+    return `${date} at ${M.fmt(d)}`;
+  }
+  function escapeHtml(s) { return String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]); }
+
+  /* ---------- admins ---------- */
+  let previewAdmins = [{ email: 'preview@masjidnuh.ca', owner: true }];
+  async function adminCall(method, body, query) {
+    if (previewMode) {
+      if (method === 'POST') { if (previewAdmins.some(a => a.email === body.email)) return { ok: false, error: `${body.email} is already an admin.` }; previewAdmins.push({ email: body.email, owner: false, addedBy: user.userDetails, addedAt: new Date().toISOString() }); }
+      if (method === 'DELETE') previewAdmins = previewAdmins.filter(a => a.email !== query);
+      return { ok: true, list: previewAdmins };
+    }
+    const r = await fetch('/api/admins' + (query ? '?email=' + encodeURIComponent(query) : ''), {
+      method, headers: body ? { 'Content-Type': 'application/json' } : {}, body: body ? JSON.stringify(body) : undefined
+    });
+    const j = await r.json().catch(() => ({}));
+    return r.ok ? { ok: true, list: j } : { ok: false, error: j.error || 'Something went wrong. Try again.' };
+  }
+  function renderAdmins(list) {
+    $('admins').innerHTML = '';
+    list.forEach(a => {
+      const li = document.createElement('li');
+      const left = document.createElement('div');
+      const b = document.createElement('b'); b.textContent = a.email; left.appendChild(b);
+      const t = document.createElement('time');
+      t.textContent = a.owner ? 'Owner, set in Cloudflare' : (a.addedBy ? `Added by ${a.addedBy}` + (a.addedAt ? ` on ${niceWhen(a.addedAt, true).split(' at ')[0]}` : '') : '');
+      left.appendChild(t); li.appendChild(left);
+      if (a.email === user.userDetails) { const s = document.createElement('span'); s.className = 'badge'; s.textContent = 'You'; li.appendChild(s); }
+      else if (a.owner) { const s = document.createElement('span'); s.className = 'badge'; s.textContent = 'Owner'; li.appendChild(s); }
+      else {
+        const rm = document.createElement('button'); rm.type = 'button'; rm.className = 'link-btn'; rm.textContent = 'Remove';
+        rm.addEventListener('click', async () => {
+          if (!confirm(`Remove ${a.email} as an admin? They won’t be able to open the dashboard.`)) return;
+          const r = await adminCall('DELETE', null, a.email);
+          if (r.ok) { renderAdmins(r.list); adminMsg(`${a.email} was removed.`, true); } else adminMsg(r.error);
+        });
+        li.appendChild(rm);
+      }
+      $('admins').appendChild(li);
+    });
+  }
+  function adminMsg(text, ok) { $('adminMsg').textContent = text || ''; $('adminMsg').classList.toggle('ok', !!ok); }
+  $('adminForm').addEventListener('submit', async e => {
+    e.preventDefault();
+    const email = $('adminEmail').value.trim().toLowerCase();
+    if (!/^[^\s@]+@[^\s@]+\.[a-z]{2,}$/i.test(email)) { adminMsg('Enter a valid email address, like name@outlook.com.'); $('adminEmail').focus(); return; }
+    const r = await adminCall('POST', { email });
+    if (r.ok) { renderAdmins(r.list); $('adminEmail').value = ''; adminMsg(`${email} can now sign in to the dashboard.`, true); } else adminMsg(r.error);
+  });
+  async function loadAdmins() { const r = await adminCall('GET'); if (r.ok) renderAdmins(r.list); else $('admins').innerHTML = '<li class="empty">Couldn’t load the admin list.</li>'; }
+
+  renderAll(); loadHistory(); loadAdmins();
+})();
+</script>
+</body>
+</html>

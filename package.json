@@ -1,0 +1,13 @@
+{
+  "name": "masjid-nuh-site",
+  "private": true,
+  "type": "module",
+  "description": "Masjid Nuh website and admin dashboard on Cloudflare Pages",
+  "scripts": {
+    "dev": "wrangler pages dev public --d1 DB",
+    "test": "node --test test/*.test.js"
+  },
+  "devDependencies": {
+    "wrangler": "^3.114.0"
+  }
+}

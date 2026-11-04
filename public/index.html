@@ -1,0 +1,855 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Masjid Nuh | Fort Erie</title>
+<meta name="description" content="Masjid Nuh, 35 Queen St, Fort Erie, Ontario. Daily prayer times, Jumu'ah, programs, services and ways to support the masjid.">
+<link rel="icon" href="/assets/mark.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Public+Sans:wght@400;500;600;700&family=Zilla+Slab:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --deep:#0D2B3A;      /* Niagara at night */
+  --lake:#16475A;      /* the lake under it */
+  --lake-2:#1F5A6F;
+  --copper:#D08A54;    /* from the logo */
+  --copper-hi:#E6A672;
+  --mist:#E8EFEE;      /* river fog */
+  --foam:#F7FAF9;
+  --ink:#10232D;
+  --ink-2:#3E5560;
+  --line:#C9D7D6;
+  --on-deep:#E9F1F1;
+  --on-deep-2:#A9C1C6;
+  --r-sm:6px; --r-md:14px; --r-lg:28px;
+  --max:1180px;
+  --display:"Zilla Slab", Rockwell, Georgia, serif;
+  --body:"Public Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --arabic:"Amiri", "Traditional Arabic", serif;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--foam);color:var(--ink);font-family:var(--body);font-size:17px;line-height:1.6}
+img{max-width:100%;display:block}
+a{color:inherit}
+:focus-visible{outline:3px solid var(--copper);outline-offset:3px;border-radius:4px}
+.wrap{max-width:var(--max);margin:0 auto;padding:0 24px}
+h1,h2,h3{font-family:var(--display);font-weight:600;line-height:1.12;margin:0;letter-spacing:-.01em}
+h2{font-size:clamp(2rem,4vw,2.9rem)}
+h3{font-size:1.35rem}
+p{margin:0}
+.lede{font-size:1.125rem;color:var(--ink-2);max-width:60ch}
+.vh{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+.skip{position:absolute;left:-999px;top:8px;background:var(--copper);color:#fff;padding:8px 14px;z-index:99;border-radius:6px}
+.skip:focus{left:8px}
+
+/* ---------- buttons ---------- */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;font:600 1rem/1 var(--body);padding:15px 22px;border-radius:999px;text-decoration:none;border:1.5px solid transparent;cursor:pointer;transition:background .2s,color .2s,border-color .2s}
+.btn-copper{background:var(--copper);color:#1B1007}
+.btn-copper:hover{background:var(--copper-hi)}
+.btn-ghost{border-color:rgba(233,241,241,.35);color:var(--on-deep);background:transparent}
+.btn-ghost:hover{border-color:var(--on-deep)}
+.btn-ink{background:var(--deep);color:var(--on-deep)}
+.btn-ink:hover{background:var(--lake)}
+.btn-line{border-color:var(--line);color:var(--ink);background:#fff}
+.btn-line:hover{border-color:var(--ink)}
+
+.announce{background:var(--copper);color:#1B1007;text-align:center;padding:11px 20px;font-weight:600;font-size:.97rem;line-height:1.4}
+.announce p{max-width:var(--max);margin:0 auto}
+.announce[hidden]{display:none}
+/* ---------- header ---------- */
+.site-head{position:sticky;top:0;z-index:50;background:rgba(13,43,58,.92);backdrop-filter:saturate(140%) blur(10px);-webkit-backdrop-filter:saturate(140%) blur(10px);border-bottom:1px solid rgba(255,255,255,.07)}
+.head-in{display:flex;align-items:center;justify-content:space-between;height:76px;gap:20px}
+.brand img{height:46px;width:auto}
+.nav{display:flex;align-items:center;gap:6px}
+.nav a{color:var(--on-deep-2);text-decoration:none;font-weight:500;font-size:.95rem;padding:8px 12px;border-radius:999px;transition:color .2s}
+.nav a:hover{color:#fff}
+.nav .btn{margin-left:8px;padding:11px 18px;font-size:.95rem;color:#1B1007}
+.menu-btn{display:none;background:none;border:0;color:#fff;padding:10px;cursor:pointer}
+.menu-btn svg{width:26px;height:26px}
+
+/* ---------- hero ---------- */
+.hero{position:relative;background:radial-gradient(1200px 520px at 78% 10%,#1B536A 0%,transparent 60%),linear-gradient(180deg,var(--deep) 0%,#0F3446 100%);color:var(--on-deep);overflow:hidden;padding:64px 0 0}
+.hero-grid{display:grid;grid-template-columns:1.25fr .9fr;gap:56px;align-items:center;position:relative;z-index:2}
+.ayah{font-family:var(--arabic);direction:rtl;font-size:clamp(2.6rem,6.4vw,5.2rem);line-height:1.35;color:var(--copper-hi);margin:0 0 10px;font-weight:400;text-align:left}
+.ayah-tr{font-family:var(--display);font-weight:500;font-size:1.15rem;color:var(--on-deep);max-width:34ch}
+.ayah-ref{display:block;font-family:var(--body);font-size:.9rem;color:var(--on-deep-2);margin-top:6px}
+.hero h1{font-size:clamp(2.1rem,4.4vw,3.4rem);margin:36px 0 16px;max-width:16ch;color:#fff}
+.hero .intro{color:var(--on-deep-2);font-size:1.12rem;max-width:52ch}
+.hero-ctas{display:flex;flex-wrap:wrap;gap:12px;margin-top:30px}
+
+.next-card{background:rgba(255,255,255,.055);border:1px solid rgba(255,255,255,.12);border-radius:var(--r-lg);padding:30px 30px 26px}
+.dates{display:flex;justify-content:space-between;gap:12px;font-size:.92rem;color:var(--on-deep-2);padding-bottom:18px;border-bottom:1px solid rgba(255,255,255,.1)}
+.dates .hijri{color:var(--copper-hi);text-align:right}
+.next-label{margin-top:22px;color:var(--on-deep-2);font-size:.98rem}
+.next-name{font-family:var(--display);font-size:2.6rem;font-weight:600;color:#fff;line-height:1.1;margin-top:4px}
+.countdown{font-family:var(--display);font-variant-numeric:tabular-nums;font-size:clamp(3rem,6vw,4.1rem);font-weight:500;color:var(--copper-hi);line-height:1;margin:10px 0 6px;letter-spacing:.01em}
+.next-meta{color:var(--on-deep-2);font-size:.95rem}
+.next-meta strong{color:var(--on-deep);font-weight:600}
+.mini-times{display:grid;grid-template-columns:repeat(5,1fr);gap:4px;margin-top:22px;padding-top:18px;border-top:1px solid rgba(255,255,255,.1)}
+.mini-times div{text-align:center;padding:8px 2px;border-radius:10px}
+.mini-times span{display:block;font-size:.78rem;color:var(--on-deep-2)}
+.mini-times b{display:block;font-weight:600;font-size:.96rem;font-variant-numeric:tabular-nums;color:var(--on-deep)}
+.mini-times .is-next{background:rgba(208,138,84,.16)}
+.mini-times .is-next b,.mini-times .is-next span{color:var(--copper-hi)}
+
+/* the river line: the day's prayers along the water */
+.riverline{position:relative;z-index:2;margin-top:64px;padding-bottom:30px}
+.rl-caption{display:flex;justify-content:space-between;align-items:baseline;gap:16px;color:var(--on-deep-2);font-size:.92rem;margin-bottom:14px}
+.rl-track{position:relative;height:92px}
+.rl-arc{position:absolute;inset:0 0 32px 0;width:100%;height:60px;overflow:visible}
+.rl-water{position:absolute;left:0;right:0;top:59px;height:2px;background:linear-gradient(90deg,rgba(233,241,241,.08),rgba(233,241,241,.4) 15%,rgba(233,241,241,.4) 85%,rgba(233,241,241,.08))}
+.rl-mark{position:absolute;top:53px;transform:translateX(-50%);text-align:center;white-space:nowrap}
+.rl-mark i{display:block;width:14px;height:14px;margin:0 auto;border-radius:50%;background:var(--deep);border:2px solid var(--on-deep-2)}
+.rl-mark span{display:block;margin-top:8px;font-size:.82rem;color:var(--on-deep-2);line-height:1.3}
+.rl-mark span b{display:block;color:var(--on-deep);font-weight:600;font-variant-numeric:tabular-nums}
+.rl-mark.passed i{background:var(--on-deep-2)}
+.rl-mark.next i{border-color:var(--copper);background:var(--copper);box-shadow:0 0 0 6px rgba(208,138,84,.22)}
+.rl-mark.next span,.rl-mark.next span b{color:var(--copper-hi)}
+.rl-mark.sun i{width:10px;height:10px;margin-top:2px;border-style:dashed}
+.rl-now{position:absolute;top:0;bottom:32px;width:2px;margin-left:-1px;background:linear-gradient(180deg,transparent,var(--copper) 60%);}
+.rl-now::after{content:"Now";position:absolute;top:-4px;left:8px;font-size:.78rem;font-weight:600;color:var(--copper-hi)}
+.waves{position:absolute;left:0;right:0;bottom:-2px;height:150px;z-index:1;pointer-events:none}
+.waves svg{position:absolute;bottom:0;width:200%;height:100%;left:0}
+.w1{animation:drift 26s linear infinite;opacity:.55}
+.w2{animation:drift 38s linear infinite reverse;opacity:.4}
+.w3{animation:drift 52s linear infinite}
+@keyframes drift{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+.hero-foot{height:70px;position:relative;z-index:2}
+
+/* ---------- sections ---------- */
+section{scroll-margin-top:84px}
+.sec{padding:104px 0}
+.sec-mist{background:var(--mist)}
+.sec-deep{background:var(--deep);color:var(--on-deep)}
+.sec-head{display:flex;justify-content:space-between;align-items:end;gap:28px;flex-wrap:wrap;margin-bottom:44px}
+.sec-head .lede{margin-top:14px}
+
+/* prayer table */
+.pt-grid{display:grid;grid-template-columns:1.55fr 1fr;gap:28px;align-items:start}
+.pt-table{background:#fff;border-radius:var(--r-lg);border:1px solid var(--line);overflow:hidden}
+.pt-table table{width:100%;border-collapse:collapse}
+.pt-table th{font-weight:600;font-size:.9rem;color:var(--ink-2);text-align:left;padding:18px 28px;border-bottom:1px solid var(--line);background:var(--foam)}
+.pt-table th:not(:first-child),.pt-table td:not(:first-child){text-align:right}
+.pt-table td{padding:20px 28px;border-bottom:1px solid #E1E9E8;font-variant-numeric:tabular-nums;font-size:1.08rem}
+.pt-table tr:last-child td{border-bottom:0}
+.pt-table td:first-child{font-family:var(--display);font-weight:600;font-size:1.3rem}
+.pt-table td:first-child small{display:block;font-family:var(--body);font-weight:400;font-size:.85rem;color:var(--ink-2);margin-top:2px}
+.pt-table .iq{font-weight:700;color:var(--ink)}
+.pt-table .ad{color:var(--ink-2)}
+.pt-table tr.sun td{color:var(--ink-2);font-size:.98rem}
+.pt-table tr.sun td:first-child{font-size:1.05rem;font-weight:500}
+.pt-table tr.is-next{background:linear-gradient(90deg,rgba(208,138,84,.14),rgba(208,138,84,.04))}
+.pt-table tr.is-next td:first-child{box-shadow:inset 4px 0 0 var(--copper)}
+.pt-table tr.is-next td:first-child small{color:#9A5A2B;font-weight:600}
+.pt-foot{display:flex;flex-wrap:wrap;gap:12px 24px;justify-content:space-between;align-items:center;padding:18px 28px;border-top:1px solid var(--line);background:var(--foam);font-size:.9rem;color:var(--ink-2)}
+.pt-foot button{font:600 .95rem var(--body);background:none;border:0;color:var(--ink);text-decoration:underline;text-underline-offset:4px;text-decoration-color:var(--copper);text-decoration-thickness:2px;cursor:pointer;padding:4px 0}
+
+.side-stack{display:grid;gap:20px}
+.jumuah{background:var(--deep);color:var(--on-deep);border-radius:var(--r-lg);padding:32px;position:relative;overflow:hidden}
+.jumuah h3{font-size:1.9rem;color:#fff}
+.jumuah .ar{font-family:var(--arabic);color:var(--copper-hi);font-size:1.6rem;line-height:1;float:right;margin-top:4px}
+.jumuah dl{margin:22px 0 0;display:grid;gap:14px}
+.jumuah dl div{display:flex;justify-content:space-between;align-items:baseline;border-bottom:1px solid rgba(255,255,255,.1);padding-bottom:12px}
+.jumuah dt{color:var(--on-deep-2)}
+.jumuah dd{margin:0;font-family:var(--display);font-size:1.6rem;font-weight:600;color:#fff;font-variant-numeric:tabular-nums}
+.jumuah p{margin-top:16px;color:var(--on-deep-2);font-size:.95rem}
+.ramadan{background:#fff;border:1px solid var(--line);border-radius:var(--r-lg);padding:26px 28px;display:flex;gap:20px;align-items:center}
+.ramadan .days{font-family:var(--display);font-size:3.2rem;line-height:1;font-weight:600;color:var(--copper);font-variant-numeric:tabular-nums;min-width:2.2ch}
+.ramadan p{color:var(--ink-2);font-size:.95rem}
+.ramadan p strong{display:block;color:var(--ink);font-size:1.05rem;font-family:var(--display);font-weight:600;font-size:1.2rem;margin-bottom:2px}
+
+/* about */
+.about-grid{display:grid;grid-template-columns:.95fr 1.05fr;gap:72px;align-items:center}
+.about-art{position:relative;aspect-ratio:4/5;border-radius:220px 220px var(--r-lg) var(--r-lg);background:linear-gradient(180deg,var(--lake) 0%,var(--deep) 100%);overflow:hidden;display:grid;place-items:center}
+.about-art img{width:52%;position:relative;z-index:2;filter:drop-shadow(0 18px 40px rgba(0,0,0,.35))}
+.about-art::before{content:"";position:absolute;inset:18px;border:1.5px solid rgba(208,138,84,.45);border-radius:205px 205px 18px 18px}
+.about-art svg{position:absolute;left:0;right:0;bottom:0;width:100%;height:34%}
+.about-copy h2{max-width:18ch}
+.about-copy p{margin-top:20px;color:var(--ink-2);font-size:1.08rem;max-width:58ch}
+.about-copy p:first-of-type{margin-top:24px}
+.pillars{list-style:none;padding:0;margin:34px 0 0;display:grid;grid-template-columns:repeat(3,1fr);gap:0;border-top:1px solid var(--line)}
+.pillars li{padding:20px 18px 0 0}
+.pillars li+li{padding-left:18px;border-left:1px solid var(--line)}
+.pillars strong{display:block;font-family:var(--display);font-size:1.2rem;font-weight:600}
+.pillars span{font-size:.93rem;color:var(--ink-2)}
+
+/* week schedule */
+.week{display:grid;grid-template-columns:repeat(7,1fr);border:1px solid var(--line);border-radius:var(--r-lg);overflow:hidden;background:#fff}
+.day{border-left:1px solid var(--line);min-height:250px;display:flex;flex-direction:column}
+.day:first-child{border-left:0}
+.day h3{font-family:var(--body);font-size:.95rem;font-weight:600;padding:16px 16px 14px;border-bottom:1px solid var(--line);color:var(--ink-2)}
+.day.today h3{color:#fff;background:var(--deep)}
+.ev{padding:14px 16px;border-bottom:1px dashed #DCE6E5}
+.ev:last-child{border-bottom:0}
+.ev b{display:block;font-weight:600;font-size:.96rem;line-height:1.35}
+.ev span{display:block;font-size:.85rem;color:var(--ink-2);margin-top:3px}
+.ev.feature{background:rgba(208,138,84,.1)}
+.ev.feature span{color:#8E5225}
+.day .empty{padding:14px 16px;font-size:.85rem;color:#8AA0A6}
+
+/* services */
+.svc-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:0;border-top:1px solid var(--line);margin-top:64px}
+.svc{padding:34px 34px 34px 0;border-bottom:1px solid var(--line)}
+.svc:nth-of-type(3n+2),.svc:nth-of-type(3n+3){padding-left:34px;border-left:1px solid var(--line)}
+.svc svg{width:34px;height:34px;color:var(--copper);margin-bottom:18px}
+.svc h3{font-size:1.4rem}
+.svc p{margin-top:10px;color:var(--ink-2);font-size:.98rem}
+.svc a{display:inline-block;margin-top:14px;font-weight:600;font-size:.95rem;text-decoration-color:var(--copper);text-underline-offset:4px;text-decoration-thickness:2px}
+
+/* donate */
+.donate{position:relative;overflow:hidden}
+.donate-grid{display:grid;grid-template-columns:1fr 1fr;gap:72px;align-items:center;position:relative;z-index:2}
+.donate h2{color:#fff;max-width:15ch}
+.hadith{margin:28px 0 0;padding:0 0 0 22px;border-left:3px solid var(--copper)}
+.hadith p{font-family:var(--display);font-size:1.4rem;font-weight:500;line-height:1.4;color:var(--on-deep)}
+.hadith cite{display:block;margin-top:10px;font-style:normal;font-size:.92rem;color:var(--on-deep-2)}
+.donate .lede{color:var(--on-deep-2);margin-top:26px}
+.give{background:var(--foam);color:var(--ink);border-radius:var(--r-lg);padding:34px}
+.give h3{font-size:1.6rem}
+.give fieldset{border:0;padding:0;margin:24px 0 0}
+.give legend{font-weight:600;font-size:.95rem;margin-bottom:10px;padding:0}
+.seg{display:grid;grid-template-columns:1fr 1fr;background:var(--mist);border-radius:999px;padding:4px}
+.seg button{font:600 .95rem var(--body);border:0;background:transparent;padding:11px;border-radius:999px;cursor:pointer;color:var(--ink-2)}
+.seg button[aria-pressed=true]{background:#fff;color:var(--ink);box-shadow:0 1px 3px rgba(13,43,58,.18)}
+.funds{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.funds button,.amts button{font:500 .98rem var(--body);text-align:left;border:1.5px solid var(--line);background:#fff;padding:14px 16px;border-radius:var(--r-md);cursor:pointer;color:var(--ink)}
+.funds button small{display:block;color:var(--ink-2);font-size:.82rem;margin-top:2px}
+.funds button[aria-pressed=true],.amts button[aria-pressed=true]{border-color:var(--deep);background:var(--deep);color:#fff}
+.funds button[aria-pressed=true] small{color:var(--on-deep-2)}
+.amts{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.amts button{text-align:center;font-weight:600;font-variant-numeric:tabular-nums}
+.custom{margin-top:10px;display:flex;align-items:center;border:1.5px solid var(--line);border-radius:var(--r-md);background:#fff;padding:0 16px}
+.custom span{font-weight:600;color:var(--ink-2)}
+.custom input{border:0;outline:0;font:500 1rem var(--body);padding:14px 8px;width:100%;background:transparent;color:var(--ink)}
+.custom:focus-within{border-color:var(--deep)}
+.give .btn{width:100%;margin-top:24px;padding:18px}
+.give-note{margin-top:14px;font-size:.88rem;color:var(--ink-2);text-align:center}
+.give-msg{display:none;margin-top:14px;padding:14px 16px;border-radius:var(--r-md);background:var(--mist);font-size:.93rem}
+.give-msg.show{display:block}
+
+/* visit */
+.visit-grid{display:grid;grid-template-columns:1fr 1.15fr;gap:56px;align-items:stretch}
+.addr{font-family:var(--display);font-size:1.9rem;font-weight:600;line-height:1.2;margin-top:24px}
+.contact-list{list-style:none;padding:0;margin:26px 0 0;display:grid;gap:4px}
+.contact-list a{font-size:1.15rem;font-weight:600;text-decoration:none}
+.contact-list a:hover{text-decoration:underline;text-decoration-color:var(--copper)}
+.visit-ctas{display:flex;flex-wrap:wrap;gap:12px;margin-top:26px}
+.firsttime{margin-top:40px;padding-top:30px;border-top:1px solid var(--line)}
+.firsttime h3{font-size:1.4rem}
+.firsttime ul{margin:14px 0 0;padding:0;list-style:none;display:grid;gap:10px}
+.firsttime li{position:relative;padding-left:22px;color:var(--ink-2)}
+.firsttime li::before{content:"";position:absolute;left:0;top:.62em;width:8px;height:8px;border-radius:50%;background:var(--copper)}
+.map{border-radius:var(--r-lg);overflow:hidden;border:1px solid var(--line);min-height:460px;background:var(--mist)}
+.map iframe{width:100%;height:100%;min-height:460px;border:0;display:block}
+
+/* footer */
+footer{background:#0A2230;color:var(--on-deep-2);padding:72px 0 36px;font-size:.95rem}
+.foot-grid{display:grid;grid-template-columns:1.4fr 1fr 1fr 1.1fr;gap:40px}
+footer img{height:54px;width:auto}
+footer h4{font-family:var(--display);font-weight:600;color:#fff;font-size:1.1rem;margin:0 0 14px}
+footer ul{list-style:none;margin:0;padding:0;display:grid;gap:8px}
+footer a{text-decoration:none}
+footer a:hover{color:#fff}
+.foot-times li{display:flex;justify-content:space-between;font-variant-numeric:tabular-nums}
+.foot-times b{color:var(--on-deep);font-weight:600}
+.foot-base{margin-top:56px;padding-top:24px;border-top:1px solid rgba(255,255,255,.08);display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px;font-size:.88rem}
+
+/* month dialog */
+dialog{border:0;border-radius:var(--r-lg);padding:0;width:min(860px,94vw);max-height:90vh;color:var(--ink);box-shadow:0 30px 80px rgba(5,20,28,.45)}
+dialog::backdrop{background:rgba(8,26,36,.65)}
+.dlg-head{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:20px 24px;border-bottom:1px solid var(--line);position:sticky;top:0;background:#fff}
+.dlg-head h3{font-size:1.5rem}
+.dlg-nav{display:flex;gap:6px}
+.icon-btn{width:40px;height:40px;border-radius:50%;border:1.5px solid var(--line);background:#fff;cursor:pointer;display:grid;place-items:center;color:var(--ink)}
+.icon-btn:hover{border-color:var(--ink)}
+.icon-btn svg{width:18px;height:18px}
+.dlg-body{overflow:auto;max-height:calc(90vh - 150px)}
+.month{width:100%;border-collapse:collapse;font-variant-numeric:tabular-nums;font-size:.95rem}
+.month th{position:sticky;top:0;background:var(--foam);font-weight:600;color:var(--ink-2);padding:12px 14px;text-align:right;border-bottom:1px solid var(--line)}
+.month th:first-child,.month td:first-child{text-align:left}
+.month td{padding:10px 14px;text-align:right;border-bottom:1px solid #E5ECEB}
+.month tr.fri td{background:#F4F8F7}
+.month tr.today td{background:rgba(208,138,84,.15);font-weight:600}
+.month td small{color:var(--ink-2);margin-left:6px}
+.month td small.mi{display:block;margin:2px 0 0;color:#9A5A2B;font-weight:600}
+.dlg-foot{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:16px 24px;border-top:1px solid var(--line);font-size:.88rem;color:var(--ink-2)}
+
+/* ---------- responsive ---------- */
+@media (max-width:1020px){
+  .hero-grid,.pt-grid,.about-grid,.donate-grid,.visit-grid{grid-template-columns:1fr}
+  .hero-grid{gap:40px}
+  .about-art{max-width:420px;aspect-ratio:1/1;border-radius:200px 200px var(--r-lg) var(--r-lg)}
+  .week{grid-template-columns:repeat(2,1fr)}
+  .day{border-left:0;border-top:1px solid var(--line);min-height:0}
+  .day:nth-child(even){border-left:1px solid var(--line)}
+  .day:nth-child(-n+2){border-top:0}
+  .svc-grid{grid-template-columns:1fr 1fr}
+  .svc,.svc:nth-of-type(3n+2),.svc:nth-of-type(3n+3){padding:30px 28px 30px 0;border-left:0}
+  .svc:nth-of-type(even){padding-left:28px;border-left:1px solid var(--line)}
+  .foot-grid{grid-template-columns:1fr 1fr}
+}
+@media (max-width:860px){
+  .nav{position:fixed;inset:76px 0 auto 0;flex-direction:column;align-items:stretch;background:var(--deep);padding:12px 20px 24px;gap:2px;border-bottom:1px solid rgba(255,255,255,.08);transform:translateY(-8px);opacity:0;visibility:hidden;transition:opacity .2s,transform .2s,visibility .2s}
+  .nav.open{transform:none;opacity:1;visibility:visible}
+  .nav a{padding:14px 8px;font-size:1.05rem;border-radius:8px}
+  .nav .btn{margin:10px 0 0;padding:15px}
+  .menu-btn{display:block}
+}
+@media (max-width:640px){
+  body{font-size:16px}
+  .wrap{padding:0 16px}
+  .sec{padding:72px 0}
+  .hero{padding-top:40px}
+  .brand img{height:38px}
+  .next-card{padding:22px 20px}
+  .next-name{font-size:2.1rem}
+  .mini-times b{font-size:.86rem}
+  .pt-table th,.pt-table td{padding:16px 16px}
+  .pt-foot{padding:16px}
+  .pt-table td:first-child{font-size:1.12rem}
+  .rl-mark span{font-size:.72rem}
+  .rl-mark.sun span{display:none}
+  .rl-mark.alt span{position:absolute;bottom:24px;left:50%;transform:translateX(-50%);margin:0}
+  .rl-mark:not(.next) span b{font-weight:500}
+  .week{grid-template-columns:1fr}
+  .day,.day:nth-child(even){border-left:0}
+  .day:nth-child(2){border-top:1px solid var(--line)}
+  .svc-grid{grid-template-columns:1fr}
+  .svc,.svc:nth-of-type(even),.svc:nth-of-type(3n+2),.svc:nth-of-type(3n+3){padding:28px 0;border-left:0}
+  .pillars{grid-template-columns:1fr}
+  .pillars li,.pillars li+li{padding:16px 0;border-left:0;border-bottom:1px solid var(--line)}
+  .funds{grid-template-columns:1fr}
+  .amts{grid-template-columns:repeat(2,1fr)}
+  .give{padding:24px 20px}
+  .foot-grid{grid-template-columns:1fr}
+  .ramadan{padding:22px}
+  .map,.map iframe{min-height:340px}
+  .dlg-head{padding:16px}
+  .month th,.month td{padding:9px 8px;font-size:.85rem}
+}
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  .w1,.w2,.w3{animation:none}
+}
+@media print{
+  body *{visibility:hidden}
+  dialog,dialog *{visibility:visible}
+  dialog{position:absolute;inset:0;box-shadow:none;width:100%;max-height:none}
+  .dlg-body{max-height:none;overflow:visible}
+  .dlg-nav,.dlg-foot button{display:none}
+}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<div class="announce" id="announce" role="note" hidden><p id="announceText"></p></div>
+
+<header class="site-head">
+  <div class="wrap head-in">
+    <a class="brand" href="#top" aria-label="Masjid Nuh, Fort Erie — home"><img src="/assets/logo.png" alt="Masjid Nuh Fort Erie" width="200" height="66"></a>
+    <button class="menu-btn" aria-expanded="false" aria-controls="nav" aria-label="Open menu">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+    </button>
+    <nav class="nav" id="nav" aria-label="Main">
+      <a href="#prayer">Prayer times</a>
+      <a href="#about">About</a>
+      <a href="#week">Programs</a>
+      <a href="#services">Services</a>
+      <a href="#visit">Visit</a>
+      <a class="btn btn-copper" href="#donate">Donate</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+<!-- ================= HERO ================= -->
+<section class="hero" id="top" aria-labelledby="hero-title">
+  <div class="wrap">
+    <div class="hero-grid">
+      <div>
+        <p class="ayah" lang="ar">بِسْمِ اللَّهِ مَجْرَاهَا وَمُرْسَاهَا</p>
+        <p class="ayah-tr">“In the name of Allah be its course and its anchorage.”
+          <span class="ayah-ref">Nuh (peace be upon him), boarding the Ark. Surah Hud 11:41</span></p>
+        <h1 id="hero-title">A place to anchor your day in Fort Erie.</h1>
+        <p class="intro">Masjid Nuh is Fort Erie’s first masjid. Join us for the five daily prayers, Jumu’ah every Friday, and Qur’an classes for our children. Everyone is welcome.</p>
+        <div class="hero-ctas">
+          <a class="btn btn-copper" href="#prayer">See today’s prayer times</a>
+          <a class="btn btn-ghost" href="#visit">Plan your visit</a>
+        </div>
+      </div>
+
+      <aside class="next-card" aria-label="Next prayer">
+        <div class="dates"><span id="greg">—</span><span class="hijri" id="hijri">—</span></div>
+        <p class="next-label" id="nextLabel">Next prayer</p>
+        <p class="next-name" id="nextName">—</p>
+        <p class="countdown" id="countdown" aria-live="off">--:--:--</p>
+        <p class="next-meta" id="nextMeta">&nbsp;</p>
+        <div class="mini-times" id="miniTimes"></div>
+      </aside>
+    </div>
+
+    <div class="riverline" aria-hidden="true">
+      <div class="rl-caption"><span>Today along the river</span><span id="rlSpan"></span></div>
+      <div class="rl-track" id="rlTrack">
+        <svg class="rl-arc" id="rlArc" preserveAspectRatio="none"></svg>
+        <div class="rl-water"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="waves" aria-hidden="true">
+    <svg class="w1" viewBox="0 0 2400 150" preserveAspectRatio="none"><path fill="#1F5A6F" d="M0 70 C 150 40 300 40 450 70 S 750 100 900 70 S 1200 40 1350 70 S 1650 100 1800 70 S 2100 40 2250 70 S 2400 90 2400 90 V150 H0Z"/></svg>
+    <svg class="w2" viewBox="0 0 2400 150" preserveAspectRatio="none"><path fill="#16475A" d="M0 95 C 200 70 400 70 600 95 S 1000 120 1200 95 S 1600 70 1800 95 S 2200 120 2400 95 V150 H0Z"/></svg>
+    <svg class="w3" viewBox="0 0 2400 150" preserveAspectRatio="none"><path fill="#E8EFEE" d="M0 120 C 120 108 240 108 360 120 S 600 132 720 120 S 960 108 1080 120 S 1320 132 1440 120 S 1680 108 1800 120 S 2040 132 2160 120 S 2400 108 2400 120 V150 H0Z"/></svg>
+  </div>
+  <div class="hero-foot"></div>
+</section>
+
+<!-- ================= PRAYER TIMES ================= -->
+<section class="sec sec-mist" id="prayer" aria-labelledby="prayer-title">
+  <div class="wrap">
+    <div class="sec-head">
+      <div>
+        <h2 id="prayer-title">Prayer times</h2>
+        <p class="lede" id="ptDate">Today in Fort Erie</p>
+      </div>
+    </div>
+
+    <div class="pt-grid">
+      <div class="pt-table">
+        <table>
+          <thead><tr><th scope="col">Prayer</th><th scope="col">Adhan</th><th scope="col">Iqamah</th></tr></thead>
+          <tbody id="ptBody"></tbody>
+        </table>
+        <div class="pt-foot">
+          <span id="methodNote">Adhan times are calculated for Fort Erie using the ISNA method.</span>
+          <button type="button" id="openMonth">View the full month</button>
+        </div>
+      </div>
+
+      <div class="side-stack">
+        <div class="jumuah" aria-labelledby="jumuah-title">
+          <span class="ar" lang="ar">الجمعة</span>
+          <h3 id="jumuah-title">Jumu’ah</h3>
+          <dl id="jumuahList"></dl>
+          <p>Please arrive early, park on Queen Street with care, and leave driveways clear for our neighbours.</p>
+        </div>
+        <div class="ramadan" id="ramadanCard">
+          <span class="days" id="ramDays">—</span>
+          <p><strong id="ramTitle">Days until Ramadan</strong><span id="ramText">Expected to begin around February 8, 2027, subject to moon sighting.</span></p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= ABOUT ================= -->
+<section class="sec" id="about" aria-labelledby="about-title">
+  <div class="wrap about-grid">
+    <div class="about-art" aria-hidden="true">
+      <img src="/assets/mark.png" alt="">
+      <svg viewBox="0 0 400 120" preserveAspectRatio="none"><path fill="#1A5268" d="M0 40 C 70 20 130 20 200 40 S 330 60 400 40 V120 H0Z"/><path fill="#22627A" d="M0 70 C 80 52 140 52 200 70 S 320 88 400 70 V120 H0Z"/></svg>
+    </div>
+    <div class="about-copy">
+      <h2 id="about-title">From a church on Queen Street to a house of Allah</h2>
+      <p>For years, Muslim families in Fort Erie drove to Niagara Falls, St. Catharines or across the bridge to Buffalo just to pray together. There was no place in town for the daily prayers, no imam to teach our children the Qur’an, and nowhere to gather for Jumu’ah.</p>
+      <p>With the support of the community, a former church building at 35 Queen Street became Masjid Nuh. We named it after the Prophet Nuh, who built the Ark with patience when others doubted, and carried the believers safely through the flood.</p>
+      <p>Today the adhan is called five times a day, a few blocks from the Niagara River. The doors are open to every Muslim, to new Muslims, and to neighbours who simply want to learn.</p>
+      <ul class="pillars">
+        <li><strong>Worship</strong><span>Five daily prayers and Jumu’ah</span></li>
+        <li><strong>Learning</strong><span>Qur’an and Islamic studies for all ages</span></li>
+        <li><strong>Community</strong><span>A home for families, youth and visitors</span></li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ================= WEEK ================= -->
+<section class="sec sec-mist" id="week" aria-labelledby="week-title">
+  <div class="wrap">
+    <div class="sec-head">
+      <div>
+        <h2 id="week-title">This week at the masjid</h2>
+        <p class="lede">Regular classes and gatherings. Programs are free unless noted, and everyone is welcome.</p>
+      </div>
+    </div>
+    <div class="week" id="weekGrid"></div>
+
+    <div class="svc-grid" id="services" aria-labelledby="svc-title">
+      <h2 id="svc-title" class="vh">Services</h2>
+      <div class="svc">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="8.5" cy="12" r="5"/><circle cx="15.5" cy="12" r="5"/></svg>
+        <h3>Nikah</h3>
+        <p>Our imam can perform your marriage at the masjid and guide you through the paperwork.</p>
+        <a href="tel:+19059662374">Call to book</a>
+      </div>
+      <div class="svc">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 19c0-8 5-14 14-15-1 9-6 15-14 15z"/><path d="M5 19l8-8"/></svg>
+        <h3>Janazah</h3>
+        <p>If you have lost a loved one, call us at any hour. We help with ghusl, the funeral prayer and burial arrangements.</p>
+        <a href="tel:+19059662374">Call (905) 966-2374</a>
+      </div>
+      <div class="svc">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19V8l8-5 8 5v11"/><path d="M9 19v-6h6v6"/></svg>
+        <h3>New Muslims</h3>
+        <p>Thinking about Islam, or recently took your shahadah? Meet with someone one to one, at your own pace.</p>
+        <a href="#visit">Visit us</a>
+      </div>
+      <div class="svc">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h16M4 12h10M4 18h7"/></svg>
+        <h3>Qur’an school</h3>
+        <p>Weekend classes for children in reading, tajweed and memorization, grouped by level.</p>
+        <a href="tel:+19059662374">Register your child</a>
+      </div>
+      <div class="svc">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 11c0 5.6-7 10-7 10z"/></svg>
+        <h3>Zakat and support</h3>
+        <p>Zakat and sadaqah collected here go to families in need, here in Fort Erie and the Niagara region.</p>
+        <a href="#donate">Give zakat</a>
+      </div>
+      <div class="svc">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
+        <h3>School and group visits</h3>
+        <p>Teachers, faith groups and neighbours can book a tour and ask anything about Islam.</p>
+        <a href="tel:+19059662374">Book a tour</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= DONATE ================= -->
+<section class="sec sec-deep donate" id="donate" aria-labelledby="donate-title">
+  <div class="wrap donate-grid">
+    <div>
+      <h2 id="donate-title">Help keep the lights on and the doors open</h2>
+      <blockquote class="hadith">
+        <p>“Whoever builds a masjid for Allah, Allah will build for him a house like it in Paradise.”</p>
+        <cite>Prophet Muhammad ﷺ, Sahih al-Bukhari and Sahih Muslim</cite>
+      </blockquote>
+      <p class="lede">Masjid Nuh runs entirely on the generosity of our community. Your gift pays for the building, the imam, utilities, and the classes that teach our children their deen.</p>
+    </div>
+
+    <form class="give" id="giveForm" novalidate>
+      <h3>Make a donation</h3>
+      <fieldset>
+        <legend>How often</legend>
+        <div class="seg" role="group">
+          <button type="button" data-freq="once" aria-pressed="true">One time</button>
+          <button type="button" data-freq="monthly" aria-pressed="false">Monthly</button>
+        </div>
+      </fieldset>
+      <fieldset>
+        <legend>Where it goes</legend>
+        <div class="funds" role="group">
+          <button type="button" data-fund="General Fund" aria-pressed="true">General fund<small>Wherever it’s needed most</small></button>
+          <button type="button" data-fund="Building Fund" aria-pressed="false">Building fund<small>Renovating our masjid</small></button>
+          <button type="button" data-fund="Zakat" aria-pressed="false">Zakat<small>For eligible families</small></button>
+          <button type="button" data-fund="Sadaqah" aria-pressed="false">Sadaqah<small>Voluntary charity</small></button>
+        </div>
+      </fieldset>
+      <fieldset>
+        <legend>Amount (CAD)</legend>
+        <div class="amts" role="group">
+          <button type="button" data-amt="25" aria-pressed="false">$25</button>
+          <button type="button" data-amt="50" aria-pressed="true">$50</button>
+          <button type="button" data-amt="100" aria-pressed="false">$100</button>
+          <button type="button" data-amt="250" aria-pressed="false">$250</button>
+        </div>
+        <label class="custom"><span>$</span><input id="customAmt" inputmode="decimal" placeholder="Other amount" aria-label="Other amount in dollars"></label>
+      </fieldset>
+      <button class="btn btn-copper" type="submit" id="giveBtn">Donate $50 to the general fund</button>
+      <p class="give-msg" id="giveMsg" role="status"></p>
+      <p class="give-note">You can also give in person at the masjid after any prayer.</p>
+    </form>
+  </div>
+</section>
+
+<!-- ================= VISIT ================= -->
+<section class="sec" id="visit" aria-labelledby="visit-title">
+  <div class="wrap visit-grid">
+    <div>
+      <h2 id="visit-title">Visit us</h2>
+      <p class="addr">35 Queen Street<br>Fort Erie, Ontario L2A 1T6</p>
+      <ul class="contact-list">
+        <li><a href="tel:+19059662374">(905) 966-2374</a></li>
+      </ul>
+      <div class="visit-ctas">
+        <a class="btn btn-ink" href="https://www.google.com/maps/dir/?api=1&destination=35+Queen+St,+Fort+Erie,+ON+L2A+1T6" target="_blank" rel="noopener">Get directions</a>
+        <a class="btn btn-line" href="tel:+19059662374">Call the masjid</a>
+      </div>
+      <div class="firsttime">
+        <h3>First time visiting a masjid?</h3>
+        <ul>
+          <li>You’re welcome any time the masjid is open. No appointment is needed to come and look around.</li>
+          <li>Please dress modestly. Women are invited, but not required, to cover their hair.</li>
+          <li>Shoes come off at the entrance, and there are shelves to keep them.</li>
+          <li>If a prayer is in progress, find a quiet spot at the back and someone will greet you after.</li>
+        </ul>
+      </div>
+    </div>
+    <div class="map">
+      <iframe title="Map showing Masjid Nuh at 35 Queen Street, Fort Erie" loading="lazy" referrerpolicy="no-referrer-when-downgrade" src="https://maps.google.com/maps?q=35%20Queen%20St%2C%20Fort%20Erie%2C%20ON%20L2A%201T6&z=16&output=embed"></iframe>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="foot-grid">
+      <div>
+        <img src="/assets/logo.png" alt="Masjid Nuh Fort Erie" width="160" height="54">
+        <p style="margin-top:18px;max-width:34ch">Fort Erie’s first masjid. A place for worship, learning and community on Queen Street.</p>
+      </div>
+      <div>
+        <h4>Find us</h4>
+        <ul>
+          <li>35 Queen St</li>
+          <li>Fort Erie, ON L2A 1T6</li>
+          <li><a href="tel:+19059662374">(905) 966-2374</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>The masjid</h4>
+        <ul>
+          <li><a href="#prayer">Prayer times</a></li>
+          <li><a href="#about">About us</a></li>
+          <li><a href="#week">Programs</a></li>
+          <li><a href="#services">Services</a></li>
+          <li><a href="#donate">Donate</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Iqamah today</h4>
+        <ul class="foot-times" id="footTimes"></ul>
+      </div>
+    </div>
+    <div class="foot-base">
+      <span>© <span id="yr">2026</span> Masjid Nuh, Fort Erie</span>
+      <span>Assalamu alaikum, and welcome.</span>
+    </div>
+  </div>
+</footer>
+
+<dialog id="monthDlg" aria-labelledby="monthTitle">
+  <div class="dlg-head">
+    <h3 id="monthTitle">Month</h3>
+    <div class="dlg-nav">
+      <button class="icon-btn" id="mPrev" aria-label="Previous month"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M15 6l-6 6 6 6"/></svg></button>
+      <button class="icon-btn" id="mNext" aria-label="Next month"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9 6l6 6-6 6"/></svg></button>
+      <button class="icon-btn" id="mClose" aria-label="Close"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+    </div>
+  </div>
+  <div class="dlg-body"><table class="month"><thead><tr><th>Date</th><th>Fajr</th><th>Sunrise</th><th>Dhuhr</th><th>Asr</th><th>Maghrib</th><th>Isha</th></tr></thead><tbody id="monthBody"></tbody></table></div>
+  <div class="dlg-foot"><span>Adhan time, with iqamah underneath. Fridays are shaded.</span><button class="btn btn-line" id="mPrint" style="padding:10px 16px">Print timetable</button></div>
+</dialog>
+
+<script src="/js/masjid.js"></script>
+<script>
+/* Weekly programs shown in "This week at the masjid". 0 = Sunday. */
+const WEEK = {
+  0: [ { t: 'Weekend Qur’an school', s: '10:00 am, children 5 to 14', f: 1 }, { t: 'Tafsir circle', s: 'After Maghrib' } ],
+  1: [ { t: 'Tajweed for adults', s: 'After Isha' } ],
+  2: [],
+  3: [ { t: 'Sisters’ halaqa', s: '7:00 pm' } ],
+  4: [ { t: 'Seerah class', s: 'After Isha' } ],
+  5: [ { t: 'Jumu’ah', s: '@jumuah', f: 1 }, { t: 'Youth night', s: 'After Maghrib, ages 13 to 18' } ],
+  6: [ { t: 'Weekend Qur’an school', s: '10:00 am, children 5 to 14', f: 1 }, { t: 'Family potluck', s: 'Last Saturday of the month' } ]
+};
+/* Online giving: paste your Stripe, Square, CanadaHelps or Mohid donation link here. */
+const DONATE_URL = '';
+
+(async function () {
+  const M = window.Masjid;
+  const $ = id => document.getElementById(id);
+  const { settings } = await M.load('/api/settings');
+  const S = settings;
+
+  // Announcement from the admin dashboard
+  if (S.announcement && S.announcement.on && S.announcement.text) {
+    $('announceText').textContent = S.announcement.text;
+    $('announce').hidden = false;
+  }
+
+  let today, tomorrow, dayKey = '';
+  const isFriday = () => M.todayParts().weekday === 'Fri';
+
+  function compute() {
+    const t = M.todayParts(), key = M.ymd(t.y, t.m, t.d);
+    if (key === dayKey) return false;
+    dayKey = key;
+    today = M.day(S, t.y, t.m, t.d);
+    const n = M.addDays(t.y, t.m, t.d, 1);
+    tomorrow = M.day(S, n.y, n.m, n.d);
+    return true;
+  }
+  function nextPrayer(now) {
+    for (const k of M.PRAYERS) if (today.adhan[k] > now) return { k, at: today.adhan[k], iq: today.iqamah[k] };
+    return { k: 'fajr', at: tomorrow.adhan.fajr, iq: tomorrow.iqamah.fajr, tomorrow: true };
+  }
+
+  function renderStatic() {
+    const now = new Date();
+    const long = now.toLocaleDateString('en-CA', { timeZone: M.TZ, weekday: 'long', month: 'long', day: 'numeric' });
+    $('greg').textContent = long;
+    let hijri = '';
+    try { hijri = new Intl.DateTimeFormat('en-u-ca-islamic-umalqura', { timeZone: M.TZ, day: 'numeric', month: 'long', year: 'numeric' }).format(now).replace(/\s?AH$/, '') + ' AH'; } catch (e) {}
+    $('hijri').textContent = hijri;
+    $('ptDate').textContent = long + (hijri ? ', ' + hijri : '');
+
+    $('ptBody').innerHTML = M.ALL.map(k => {
+      const sun = k === 'sunrise';
+      return `<tr data-k="${k}" class="${sun ? 'sun' : ''}"><td>${M.NAMES[k]}<small lang="ar">${M.AR[k]}</small></td><td class="ad">${M.fmt(today.adhan[k])}</td><td class="iq">${sun ? '' : M.fmt(today.iqamah[k])}</td></tr>`;
+    }).join('');
+    $('miniTimes').innerHTML = M.PRAYERS.map(k => `<div data-k="${k}"><span>${M.NAMES[k]}</span><b>${M.fmt(today.iqamah[k]).replace(/ [ap]m/, '')}</b></div>`).join('');
+    $('footTimes').innerHTML = M.PRAYERS.map(k => `<li><span>${M.NAMES[k]}</span><b>${M.fmt(today.iqamah[k])}</b></li>`).join('');
+    $('jumuahList').innerHTML = today.jumuah.map(j => `<div><dt></dt><dd>${M.fmt(j.at)}</dd></div>`).join('');
+    $('jumuahList').querySelectorAll('dt').forEach((dt, i) => dt.textContent = today.jumuah[i].label);
+    $('methodNote').textContent = `Adhan times are calculated for Fort Erie using the ${S.method === 'ISNA' ? 'ISNA' : M.METHODS[S.method].label} method.`;
+
+    // Ramadan
+    const t = M.todayParts();
+    if (S.ramadanStart) {
+      const [ry, rm, rd] = S.ramadanStart.split('-').map(Number);
+      const days = Math.round((Date.UTC(ry, rm - 1, rd) - Date.UTC(t.y, t.m - 1, t.d)) / 864e5);
+      const nice = new Date(Date.UTC(ry, rm - 1, rd, 12)).toLocaleDateString('en-CA', { timeZone: 'UTC', month: 'long', day: 'numeric', year: 'numeric' });
+      if (days > 0) { $('ramDays').textContent = days; $('ramText').textContent = `Expected to begin around ${nice}, subject to moon sighting.`; }
+      else if (days > -30) { $('ramDays').textContent = days === 0 ? '1' : String(1 - days); $('ramTitle').textContent = 'Day of Ramadan'; $('ramText').textContent = 'Ramadan Mubarak. Taraweeh is prayed after Isha.'; }
+      else $('ramadanCard').hidden = true;
+    } else $('ramadanCard').hidden = true;
+
+    renderWeek();
+    renderRiver();
+    $('yr').textContent = t.y;
+  }
+
+  function renderWeek() {
+    const names = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+    const todayIdx = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].indexOf(M.todayParts().weekday);
+    const jum = today.jumuah[0] ? `${today.jumuah[0].label} ${M.fmt(today.jumuah[0].at)}` : 'After Dhuhr';
+    $('weekGrid').innerHTML = [1, 2, 3, 4, 5, 6, 0].map(i => {
+      const evs = WEEK[i] || [];
+      const body = evs.length ? evs.map(e => `<div class="ev${e.f ? ' feature' : ''}"><b>${e.t}</b><span>${e.s === '@jumuah' ? jum : e.s}</span></div>`).join('') : '<p class="empty">Daily prayers only</p>';
+      return `<div class="day${i === todayIdx ? ' today' : ''}"><h3>${names[i]}${i === todayIdx ? '<span class="vh">, today</span>' : ''}</h3>${body}</div>`;
+    }).join('');
+  }
+
+  let rlStart, rlEnd;
+  function renderRiver() {
+    rlStart = today.adhan.fajr.getTime() - 36e5; rlEnd = today.adhan.isha.getTime() + 36e5;
+    const pos = d => ((d.getTime() - rlStart) / (rlEnd - rlStart)) * 100;
+    const track = $('rlTrack');
+    track.querySelectorAll('.rl-mark,.rl-now').forEach(n => n.remove());
+    M.ALL.forEach(k => {
+      const m = document.createElement('div');
+      m.className = 'rl-mark' + (k === 'sunrise' ? ' sun' : '') + (k === 'isha' ? ' alt' : '');
+      m.dataset.k = k;
+      m.style.left = pos(today.adhan[k]) + '%';
+      m.innerHTML = `<i></i><span>${M.NAMES[k]}<b>${M.fmt(today.adhan[k])}</b></span>`;
+      track.appendChild(m);
+    });
+    const now = document.createElement('div'); now.className = 'rl-now'; now.id = 'rlNow'; track.appendChild(now);
+    const svg = $('rlArc'), w = track.clientWidth || 1000, h = 60;
+    svg.setAttribute('viewBox', `0 0 ${w} ${h}`);
+    const x1 = pos(today.adhan.sunrise) / 100 * w, x2 = pos(today.adhan.maghrib) / 100 * w, xm = (x1 + x2) / 2;
+    svg.innerHTML = `<defs><linearGradient id="arcG" x1="0" x2="1"><stop offset="0" stop-color="#D08A54" stop-opacity=".2"/><stop offset=".5" stop-color="#E6A672" stop-opacity=".9"/><stop offset="1" stop-color="#D08A54" stop-opacity=".2"/></linearGradient></defs>
+      <path d="M${x1} ${h} Q ${xm} ${-h * 0.75} ${x2} ${h}" fill="none" stroke="url(#arcG)" stroke-width="1.5" stroke-dasharray="3 5"/>`;
+    $('rlSpan').textContent = `Sunrise ${M.fmt(today.adhan.sunrise)}, sunset ${M.fmt(today.adhan.maghrib)}`;
+  }
+
+  function tick() {
+    if (compute()) renderStatic();
+    const now = new Date(), nx = nextPrayer(now);
+    const diff = Math.max(0, nx.at - now);
+    const h = Math.floor(diff / 36e5), m = Math.floor(diff % 36e5 / 6e4), s = Math.floor(diff % 6e4 / 1e3);
+    $('countdown').textContent = `${h}:${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
+    const jum = nx.k === 'dhuhr' && isFriday() && today.jumuah.length;
+    $('nextName').textContent = jum ? 'Jumu’ah' : M.NAMES[nx.k];
+    $('nextLabel').textContent = nx.tomorrow ? 'Next prayer, tomorrow' : 'Next prayer in';
+    $('nextMeta').innerHTML = jum
+      ? `${today.jumuah[0].label} <strong>${M.fmt(today.jumuah[0].at)}</strong>`
+      : `Adhan <strong>${M.fmt(nx.at)}</strong>, iqamah <strong>${M.fmt(nx.iq)}</strong>`;
+
+    const nk = nx.tomorrow ? null : nx.k;
+    document.querySelectorAll('#ptBody tr').forEach(r => {
+      const isNext = r.dataset.k === nk; r.classList.toggle('is-next', isNext);
+      const sm = r.querySelector('small'); if (!sm.dataset.ar) sm.dataset.ar = sm.textContent;
+      if (isNext) { sm.textContent = 'Next prayer'; sm.removeAttribute('lang'); } else { sm.textContent = sm.dataset.ar; sm.setAttribute('lang', 'ar'); }
+    });
+    document.querySelectorAll('#miniTimes div').forEach(r => r.classList.toggle('is-next', r.dataset.k === nx.k));
+    document.querySelectorAll('.rl-mark').forEach(mk => {
+      mk.classList.toggle('passed', today.adhan[mk.dataset.k] <= now);
+      mk.classList.toggle('next', mk.dataset.k === nk);
+    });
+    const nowEl = $('rlNow');
+    if (nowEl) {
+      const p = (now - rlStart) / (rlEnd - rlStart) * 100;
+      nowEl.style.display = (p < 0 || p > 100) ? 'none' : 'block';
+      nowEl.style.left = p + '%';
+    }
+  }
+
+  // Month timetable (adhan + iqamah)
+  let mY, mM;
+  function renderMonth() {
+    $('monthTitle').textContent = new Date(Date.UTC(mY, mM - 1, 15)).toLocaleDateString('en-CA', { month: 'long', year: 'numeric', timeZone: 'UTC' });
+    const t = M.todayParts(), last = new Date(Date.UTC(mY, mM, 0)).getUTCDate();
+    let html = '';
+    for (let d = 1; d <= last; d++) {
+      const day = M.day(S, mY, mM, d);
+      const wd = new Date(Date.UTC(mY, mM - 1, d, 12)).toLocaleDateString('en-CA', { weekday: 'short', timeZone: 'UTC' });
+      const cls = [(wd === 'Fri' ? 'fri' : ''), (t.y === mY && t.m === mM && t.d === d) ? 'today' : ''].join(' ');
+      html += `<tr class="${cls}"><td>${d}<small>${wd}</small></td>` + M.ALL.map(k => k === 'sunrise'
+        ? `<td>${M.fmt(day.adhan[k])}</td>`
+        : `<td>${M.fmt(day.adhan[k])}<small class="mi">${M.fmt(day.iqamah[k])}</small></td>`).join('') + '</tr>';
+    }
+    $('monthBody').innerHTML = html;
+  }
+  $('openMonth').addEventListener('click', () => { const t = M.todayParts(); mY = t.y; mM = t.m; renderMonth(); $('monthDlg').showModal(); });
+  $('mPrev').addEventListener('click', () => { mM--; if (mM < 1) { mM = 12; mY--; } renderMonth(); });
+  $('mNext').addEventListener('click', () => { mM++; if (mM > 12) { mM = 1; mY++; } renderMonth(); });
+  $('mClose').addEventListener('click', () => $('monthDlg').close());
+  $('mPrint').addEventListener('click', () => window.print());
+  $('monthDlg').addEventListener('click', e => { if (e.target === $('monthDlg')) $('monthDlg').close(); });
+
+  let rt; window.addEventListener('resize', () => { clearTimeout(rt); rt = setTimeout(() => { renderRiver(); tick(); }, 150); });
+  compute(); renderStatic(); tick(); setInterval(tick, 1000);
+})();
+
+/* Navigation and donation form (don't depend on prayer settings) */
+(function () {
+  const $ = id => document.getElementById(id);
+  const mb = document.querySelector('.menu-btn'), nav = $('nav');
+  mb.addEventListener('click', () => { const o = nav.classList.toggle('open'); mb.setAttribute('aria-expanded', o); mb.setAttribute('aria-label', o ? 'Close menu' : 'Open menu'); });
+  nav.querySelectorAll('a').forEach(a => a.addEventListener('click', () => { nav.classList.remove('open'); mb.setAttribute('aria-expanded', 'false'); }));
+
+  const give = { freq: 'once', fund: 'General Fund', amt: 50 };
+  const press = (group, btn) => group.querySelectorAll('button').forEach(b => b.setAttribute('aria-pressed', b === btn));
+  function updateGive() {
+    const a = give.amt ? '$' + (Number.isInteger(give.amt) ? give.amt : give.amt.toFixed(2)) : '';
+    const fund = give.fund === 'Zakat' || give.fund === 'Sadaqah' ? give.fund.toLowerCase() : 'the ' + give.fund.toLowerCase();
+    $('giveBtn').textContent = a ? `Donate ${a}${give.freq === 'monthly' ? ' monthly' : ''} to ${fund}` : 'Choose an amount';
+  }
+  document.querySelector('.seg').addEventListener('click', e => { const b = e.target.closest('button'); if (!b) return; give.freq = b.dataset.freq; press(b.parentNode, b); updateGive(); });
+  document.querySelector('.funds').addEventListener('click', e => { const b = e.target.closest('button'); if (!b) return; give.fund = b.dataset.fund; press(b.parentNode, b); updateGive(); });
+  document.querySelector('.amts').addEventListener('click', e => { const b = e.target.closest('button'); if (!b) return; give.amt = +b.dataset.amt; $('customAmt').value = ''; press(b.parentNode, b); updateGive(); });
+  $('customAmt').addEventListener('input', e => { const v = parseFloat(e.target.value.replace(/[^0-9.]/g, '')); give.amt = v > 0 ? v : 0; press(document.querySelector('.amts'), null); updateGive(); });
+  $('giveForm').addEventListener('submit', e => {
+    e.preventDefault();
+    const msg = $('giveMsg');
+    if (!give.amt) { msg.textContent = 'Choose an amount or enter your own to continue.'; msg.classList.add('show'); return; }
+    if (DONATE_URL) {
+      const u = new URL(DONATE_URL); u.searchParams.set('amount', give.amt); u.searchParams.set('fund', give.fund); u.searchParams.set('frequency', give.freq);
+      window.open(u.toString(), '_blank', 'noopener');
+    } else {
+      msg.innerHTML = 'Online giving is being set up. To give today, call <a href="tel:+19059662374">(905) 966-2374</a> or donate in person after any prayer. JazakAllahu khayran.';
+      msg.classList.add('show');
+    }
+  });
+})();
+</script>
+</body>
+</html>
