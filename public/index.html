@@ -201,7 +201,7 @@ section{scroll-margin-top:84px}
 
 /* donate */
 .donate{position:relative;overflow:hidden}
-.donate-grid{display:grid;grid-template-columns:1fr 1fr;gap:72px;align-items:center;position:relative;z-index:2}
+.donate-grid{display:grid;grid-template-columns:1fr 1fr;gap:72px;align-items:start;position:relative;z-index:2}
 .donate h2{color:#fff;max-width:15ch}
 .hadith{margin:28px 0 0;padding:0 0 0 22px;border-left:3px solid var(--copper)}
 .hadith p{font-family:var(--display);font-size:1.4rem;font-weight:500;line-height:1.4;color:var(--on-deep)}
@@ -227,6 +227,15 @@ section{scroll-margin-top:84px}
 .custom:focus-within{border-color:var(--deep)}
 .give .btn{width:100%;margin-top:24px;padding:18px}
 .give-note{margin-top:14px;font-size:.88rem;color:var(--ink-2);text-align:center}
+.give-embed{padding:0;overflow:hidden;background:#F7F7F7}
+.give-embed iframe{display:block;width:100%;height:1060px;border:0;background:#F7F7F7}
+.give-embed .give-note{margin:0;padding:16px 22px 20px;background:var(--foam);border-top:1px solid var(--line)}
+.give-embed .give-note a{color:var(--ink);font-weight:600;text-decoration-color:var(--copper);text-underline-offset:3px}
+@media (min-width:1021px){.donate-grid > div:first-child{position:sticky;top:110px}}
+.funds-list{list-style:none;margin:26px 0 0;padding:0;display:grid;gap:12px}
+.funds-list li{color:var(--on-deep-2);font-size:.98rem;padding-left:18px;position:relative}
+.funds-list li::before{content:"";position:absolute;left:0;top:.6em;width:7px;height:7px;border-radius:50%;background:var(--copper)}
+.funds-list b{display:block;color:#fff;font-family:var(--display);font-weight:600;font-size:1.1rem}
 .give-msg{display:none;margin-top:14px;padding:14px 16px;border-radius:var(--r-md);background:var(--mist);font-size:.93rem}
 .give-msg.show{display:block}
 
@@ -324,6 +333,8 @@ dialog::backdrop{background:rgba(8,26,36,.65)}
   .funds{grid-template-columns:1fr}
   .amts{grid-template-columns:repeat(2,1fr)}
   .give{padding:24px 20px}
+  .give.give-embed{padding:0}
+  .give-embed iframe{height:1000px}
   .foot-grid{grid-template-columns:1fr}
   .ramadan{padding:22px}
   .map,.map iframe{min-height:340px}
@@ -530,40 +541,18 @@ dialog::backdrop{background:rgba(8,26,36,.65)}
         <cite>Prophet Muhammad ﷺ, Sahih al-Bukhari and Sahih Muslim</cite>
       </blockquote>
       <p class="lede">Masjid Nuh runs entirely on the generosity of our community. Your gift pays for the building, the imam, utilities, and the classes that teach our children their deen.</p>
+      <ul class="funds-list">
+        <li><b>Mosque donation</b> General running costs and the building</li>
+        <li><b>Sadaqah</b> Voluntary charity, given wherever it’s needed</li>
+        <li><b>Zakat</b> Distributed to eligible families</li>
+        <li><b>Qur’an class</b> Teaching our children the Book of Allah</li>
+      </ul>
     </div>
 
-    <form class="give" id="giveForm" novalidate>
-      <h3>Make a donation</h3>
-      <fieldset>
-        <legend>How often</legend>
-        <div class="seg" role="group">
-          <button type="button" data-freq="once" aria-pressed="true">One time</button>
-          <button type="button" data-freq="monthly" aria-pressed="false">Monthly</button>
-        </div>
-      </fieldset>
-      <fieldset>
-        <legend>Where it goes</legend>
-        <div class="funds" role="group">
-          <button type="button" data-fund="General Fund" aria-pressed="true">General fund<small>Wherever it’s needed most</small></button>
-          <button type="button" data-fund="Building Fund" aria-pressed="false">Building fund<small>Renovating our masjid</small></button>
-          <button type="button" data-fund="Zakat" aria-pressed="false">Zakat<small>For eligible families</small></button>
-          <button type="button" data-fund="Sadaqah" aria-pressed="false">Sadaqah<small>Voluntary charity</small></button>
-        </div>
-      </fieldset>
-      <fieldset>
-        <legend>Amount (CAD)</legend>
-        <div class="amts" role="group">
-          <button type="button" data-amt="25" aria-pressed="false">$25</button>
-          <button type="button" data-amt="50" aria-pressed="true">$50</button>
-          <button type="button" data-amt="100" aria-pressed="false">$100</button>
-          <button type="button" data-amt="250" aria-pressed="false">$250</button>
-        </div>
-        <label class="custom"><span>$</span><input id="customAmt" inputmode="decimal" placeholder="Other amount" aria-label="Other amount in dollars"></label>
-      </fieldset>
-      <button class="btn btn-copper" type="submit" id="giveBtn">Donate $50 to the general fund</button>
-      <p class="give-msg" id="giveMsg" role="status"></p>
-      <p class="give-note">You can also give in person at the masjid after any prayer.</p>
-    </form>
+    <div class="give give-embed">
+      <iframe src="https://donorchoice.ca/embedded/masjidnuh" title="Donate to Masjid Nuh securely through DonorChoice" loading="lazy" allow="payment"></iframe>
+      <p class="give-note">Donations are processed securely by DonorChoice. Form not loading? <a href="https://donorchoice.ca/embedded/masjidnuh" target="_blank" rel="noopener">Open the donation page</a>. You can also give in person at the masjid after any prayer.</p>
+    </div>
   </div>
 </section>
 
@@ -659,8 +648,6 @@ const WEEK = {
   5: [ { t: 'Jumu’ah', s: '@jumuah', f: 1 }, { t: 'Youth night', s: 'After Maghrib, ages 13 to 18' } ],
   6: [ { t: 'Weekend Qur’an school', s: '10:00 am, children 5 to 14', f: 1 }, { t: 'Family potluck', s: 'Last Saturday of the month' } ]
 };
-/* Online giving: paste your Stripe, Square, CanadaHelps or Mohid donation link here. */
-const DONATE_URL = '';
 
 (async function () {
   const M = window.Masjid;
@@ -819,36 +806,13 @@ const DONATE_URL = '';
   compute(); renderStatic(); tick(); setInterval(tick, 1000);
 })();
 
-/* Navigation and donation form (don't depend on prayer settings) */
+/* Navigation (doesn't depend on prayer settings) */
 (function () {
   const $ = id => document.getElementById(id);
   const mb = document.querySelector('.menu-btn'), nav = $('nav');
   mb.addEventListener('click', () => { const o = nav.classList.toggle('open'); mb.setAttribute('aria-expanded', o); mb.setAttribute('aria-label', o ? 'Close menu' : 'Open menu'); });
   nav.querySelectorAll('a').forEach(a => a.addEventListener('click', () => { nav.classList.remove('open'); mb.setAttribute('aria-expanded', 'false'); }));
 
-  const give = { freq: 'once', fund: 'General Fund', amt: 50 };
-  const press = (group, btn) => group.querySelectorAll('button').forEach(b => b.setAttribute('aria-pressed', b === btn));
-  function updateGive() {
-    const a = give.amt ? '$' + (Number.isInteger(give.amt) ? give.amt : give.amt.toFixed(2)) : '';
-    const fund = give.fund === 'Zakat' || give.fund === 'Sadaqah' ? give.fund.toLowerCase() : 'the ' + give.fund.toLowerCase();
-    $('giveBtn').textContent = a ? `Donate ${a}${give.freq === 'monthly' ? ' monthly' : ''} to ${fund}` : 'Choose an amount';
-  }
-  document.querySelector('.seg').addEventListener('click', e => { const b = e.target.closest('button'); if (!b) return; give.freq = b.dataset.freq; press(b.parentNode, b); updateGive(); });
-  document.querySelector('.funds').addEventListener('click', e => { const b = e.target.closest('button'); if (!b) return; give.fund = b.dataset.fund; press(b.parentNode, b); updateGive(); });
-  document.querySelector('.amts').addEventListener('click', e => { const b = e.target.closest('button'); if (!b) return; give.amt = +b.dataset.amt; $('customAmt').value = ''; press(b.parentNode, b); updateGive(); });
-  $('customAmt').addEventListener('input', e => { const v = parseFloat(e.target.value.replace(/[^0-9.]/g, '')); give.amt = v > 0 ? v : 0; press(document.querySelector('.amts'), null); updateGive(); });
-  $('giveForm').addEventListener('submit', e => {
-    e.preventDefault();
-    const msg = $('giveMsg');
-    if (!give.amt) { msg.textContent = 'Choose an amount or enter your own to continue.'; msg.classList.add('show'); return; }
-    if (DONATE_URL) {
-      const u = new URL(DONATE_URL); u.searchParams.set('amount', give.amt); u.searchParams.set('fund', give.fund); u.searchParams.set('frequency', give.freq);
-      window.open(u.toString(), '_blank', 'noopener');
-    } else {
-      msg.innerHTML = 'Online giving is being set up. To give today, call <a href="tel:+19059662374">(905) 966-2374</a> or donate in person after any prayer. JazakAllahu khayran.';
-      msg.classList.add('show');
-    }
-  });
 })();
 </script>
 </body>
