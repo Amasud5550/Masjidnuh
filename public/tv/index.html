@@ -91,15 +91,16 @@ body.idle{cursor:none}
 
 .tiles{position:absolute;left:56px;right:56px;top:700px;height:232px;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,.74fr) repeat(4,minmax(0,1fr));grid-template-rows:232px;align-items:stretch;gap:16px}
 .tiles > .sun{order:0}
-.tile{position:relative;border-radius:24px;background:rgba(255,255,255,.055);border:1px solid var(--line);padding:22px 24px 20px;display:flex;flex-direction:column;transition:background .6s,opacity .6s,border-color .6s}
+.tile{position:relative;min-width:0;border-radius:24px;background:rgba(255,255,255,.055);border:1px solid var(--line);padding:20px 24px 18px;display:flex;flex-direction:column;transition:background .6s,opacity .6s,border-color .6s}
 .tile .nm{display:flex;justify-content:space-between;align-items:baseline;gap:8px}
-.tile .en{font-family:var(--display);font-weight:600;font-size:38px;line-height:1;color:#fff;white-space:nowrap}
-.tile .ar{font-family:var(--arabic);font-size:32px;line-height:1;color:var(--copper-hi)}
-.tile .row{display:flex;justify-content:space-between;align-items:baseline;margin-top:16px;padding-bottom:14px;border-bottom:1px solid var(--line)}
-.tile .lbl{font-size:22px;color:var(--on-2);font-weight:500}
-.tile .ad{font-size:32px;font-weight:600;color:var(--on)}
-.tile .iq{display:flex;justify-content:space-between;align-items:baseline;margin-top:auto}
-.tile .big{font-family:var(--display);font-weight:600;font-size:70px;line-height:.95;color:#fff;letter-spacing:-.01em}
+.tile .en{font-family:var(--display);font-weight:600;font-size:38px;line-height:1;color:#fff;white-space:nowrap;min-width:0;overflow:hidden;text-overflow:ellipsis}
+.tile .ar{font-family:var(--arabic);font-size:32px;line-height:1;color:var(--copper-hi);white-space:nowrap;flex:none}
+.tile .row{display:flex;justify-content:space-between;align-items:baseline;gap:10px;margin-top:14px;padding-bottom:12px;border-bottom:1px solid var(--line)}
+.tile .lbl{font-size:22px;line-height:1.2;color:var(--on-2);font-weight:500;white-space:nowrap;min-width:0;overflow:hidden;text-overflow:ellipsis}
+.tile .ad{font-size:32px;font-weight:600;color:var(--on);white-space:nowrap;flex:none}
+.tile .iq{display:flex;flex-direction:column;margin-top:auto;min-width:0}
+.tile .iq .lbl{margin-bottom:4px}
+.tile .big{display:block;font-family:var(--display);font-weight:600;font-size:70px;line-height:.95;color:#fff;letter-spacing:-.01em;white-space:nowrap}
 .tile.sun .big{color:var(--on-2);font-size:60px}
 .tile.sun .row{border-color:transparent}
 .tile.passed{opacity:.42}
@@ -313,12 +314,13 @@ body.idle{cursor:none}
           const kh = d.jumuah[0], pr = d.jumuah[1] || d.jumuah[0];
           return `<div class="tile" data-k="dhuhr"><div class="nm"><span class="en">Jumu’ah</span><span class="ar" lang="ar">الجمعة</span></div>
             <div class="row"><span class="lbl">${esc(kh.label)}</span><span class="ad">${digits(hm(kh.at))}</span></div>
-            <div class="iq"><span class="big">${digits(hm(pr.at))}</span><span class="lbl">${esc(d.jumuah[1] ? d.jumuah[1].label : 'Prayer')}</span></div></div>`;
+            <div class="iq"><span class="lbl">${esc(d.jumuah[1] ? d.jumuah[1].label : 'Prayer')}</span><span class="big">${digits(hm(pr.at))}</span></div></div>`;
         }
         return `<div class="tile" data-k="${k}"><div class="nm"><span class="en">${M.NAMES[k]}</span><span class="ar" lang="ar">${M.AR[k]}</span></div>
           <div class="row"><span class="lbl">Adhan</span><span class="ad">${digits(hm(d.adhan[k]))}</span></div>
-          <div class="iq"><span class="big">${digits(hm(d.iqamah[k]))}</span><span class="lbl">Iqamah</span></div></div>`;
+          <div class="iq"><span class="lbl">Iqamah</span><span class="big">${digits(hm(d.iqamah[k]))}</span></div></div>`;
       }).join('');
+      fitTiles();
     }
     document.querySelectorAll('.tile').forEach(el => {
       const k = el.dataset.k;
@@ -334,6 +336,16 @@ body.idle{cursor:none}
     const showJm = jm.length && !(fri);
     $('stripR').innerHTML = showJm ? '<span>Jumu’ah every Friday</span>' + jm.map(j => `<span>${esc(j.label)}<b>${hmFull(j.at)}</b></span>`).join('') : '';
   }
+  /** Shrink any number that would overflow its tile, so a time can never wrap or spill out. */
+  function fitTiles() {
+    document.querySelectorAll('.tile .big, .tile .ad').forEach(el => {
+      el.style.fontSize = '';
+      const box = el.parentElement, max = el.classList.contains('big') ? box.clientWidth : box.clientWidth * .6;
+      let size = parseFloat(getComputedStyle(el).fontSize);
+      while (el.scrollWidth > max && size > 20) { size -= 2; el.style.fontSize = size + 'px'; }
+    });
+  }
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => { tileKey = ''; render(); });
   function tomorrowWeekday() { const t = now(); const p = M.todayParts(t); const n = M.addDays(p.y, p.m, p.d, 1); return new Date(Date.UTC(n.y, n.m - 1, n.d, 12)).toLocaleDateString('en-CA', { weekday: 'long', timeZone: 'UTC' }); }
 
   /* ---------- left panel + overlay ---------- */
