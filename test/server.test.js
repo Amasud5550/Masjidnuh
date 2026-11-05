@@ -58,3 +58,46 @@ test('redirects only go to paths on this site', () => {
   assert.equal(safeNext('https://evil.example'), '/admin/');
   assert.equal(safeNext('/\\evil.example'), '/admin/');
 });
+
+import { isAdmin, groupMode } from '../lib/db.js';
+const genv = { ADMIN_EMAILS: 'owner@masjidnuh.ca', ADMIN_GROUP_IDS: '11111111-AAAA-4aaa-8aaa-aaaaaaaaaaaa, 22222222-bbbb-4bbb-8bbb-bbbbbbbbbbbb' };
+test('group mode lets in members of an allowed group only', async () => {
+  assert.equal(groupMode(genv), true);
+  assert.equal(await isAdmin(genv, { email: 'a@m.ca', grps: ['11111111-aaaa-4aaa-8aaa-aaaaaaaaaaaa'] }), true);
+  assert.equal(await isAdmin(genv, { email: 'b@m.ca', grps: ['99999999-0000-4000-8000-000000000000'] }), false);
+  assert.equal(await isAdmin(genv, { email: 'c@m.ca', grps: [] }), false);
+  assert.equal(await isAdmin(genv, { email: 'c@m.ca' }), false);
+});
+test('owners always get in, even without a group', async () => {
+  assert.equal(await isAdmin(genv, { email: 'Owner@MasjidNuh.ca', grps: [] }), true);
+});
+test('removing a group from ADMIN_GROUP_IDS revokes access for existing sessions', async () => {
+  const s = { email: 'a@m.ca', grps: ['22222222-bbbb-4bbb-8bbb-bbbbbbbbbbbb'] };
+  assert.equal(await isAdmin(genv, s), true);
+  assert.equal(await isAdmin({ ...genv, ADMIN_GROUP_IDS: '11111111-aaaa-4aaa-8aaa-aaaaaaaaaaaa' }, s), false);
+});
+
+import { validateTv, validateSlide } from '../lib/tv.js';
+test('TV settings: valid values pass, bad ones are rejected', () => {
+  const ok = validateTv({ ticker: ['Hello', '  ', 'World'], prayerScreen: { on: true, minutes: 8 }, jumuahMinutes: 40, donateSlide: { on: true, title: 'Give', link: 'https://donorchoice.ca/embedded/masjidnuh' }, hijriAdjust: -1, clock24: true });
+  assert.equal(ok.errors, undefined);
+  assert.deepEqual(ok.value.ticker, ['Hello', 'World']);
+  const bad = validateTv({ prayerScreen: { minutes: 99 }, jumuahMinutes: 2, hijriAdjust: 5, donateSlide: { on: true, link: 'javascript:alert(1)' } });
+  assert.equal(bad.errors.length, 4);
+});
+test('slides: text needs a title, image needs a picture, links must be https', () => {
+  assert.ok(validateSlide({ kind: 'text', title: '' }, { creating: true }).errors);
+  assert.ok(validateSlide({ kind: 'image', title: 'x' }, { creating: true }).errors);
+  assert.ok(validateSlide({ kind: 'text', title: 'Hi', link: 'http://x.example' }, { creating: true }).errors);
+  assert.ok(validateSlide({ kind: 'text', title: 'Hi', start: '2026-12-10', end: '2026-12-01' }, { creating: true }).errors);
+  const v = validateSlide({ kind: 'text', title: 'Youth night', body: 'Pizza', link: 'https://example.org/a', seconds: 15 }, { creating: true });
+  assert.equal(v.errors, undefined); assert.equal(v.value.seconds, 15);
+});
+test('slides: pictures are decoded, and anything that is not an image is refused', () => {
+  const png = 'data:image/png;base64,' + btoa(String.fromCharCode(137, 80, 78, 71, 13, 10, 26, 10));
+  const v = validateSlide({ kind: 'image', image: png }, { creating: true });
+  assert.equal(v.image.mime, 'image/png'); assert.equal(v.image.bytes[1], 80);
+  assert.ok(validateSlide({ kind: 'image', image: 'data:text/html;base64,PHNjcmlwdD4=' }, { creating: true }).errors);
+  const huge = 'data:image/jpeg;base64,' + btoa('x'.repeat(1_600_000));
+  assert.ok(validateSlide({ kind: 'image', image: huge }, { creating: true }).errors);
+});

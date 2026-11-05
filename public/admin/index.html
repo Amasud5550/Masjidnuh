@@ -37,6 +37,11 @@ button,input,select,textarea{font:inherit;color:inherit}
 .avatar{width:32px;height:32px;border-radius:50%;background:var(--copper);color:#1B1007;display:grid;place-items:center;font-weight:700;font-size:.85rem}
 .top a{color:#E9F1F1;text-decoration:none;font-size:.92rem;font-weight:500;padding:8px 12px;border-radius:999px;border:1px solid rgba(255,255,255,.18);white-space:nowrap}
 .top a:hover{border-color:#fff}
+.sections{display:flex;gap:4px;margin-left:12px}
+.top .sections a{border-color:transparent;color:#A9C1C6}
+.top .sections a:hover{color:#fff;border-color:transparent}
+.top .sections a[aria-current=page]{background:rgba(255,255,255,.1);color:#fff}
+@media (max-width:820px){.top .title{display:none}.sections{margin-left:0}}
 .preview-note{background:var(--warn-bg);color:var(--warn);font-size:.92rem;text-align:center;padding:10px 16px;border-bottom:1px solid #F0D9BD}
 
 /* layout */
@@ -121,11 +126,13 @@ details.more p{color:var(--ink-2);font-size:.9rem;margin-top:8px}
 .empty{color:var(--ink-2);font-size:.94rem}
 .badge{font-size:.78rem;font-weight:600;color:var(--ink-2);background:var(--mist);border-radius:999px;padding:3px 10px;white-space:nowrap}
 .add-admin{display:flex;gap:10px;margin-top:16px}
+.add-admin[hidden],.form-msg[hidden],.group-note[hidden]{display:none}
 .add-admin input{flex:1;min-width:0}
 .btn-ink{background:var(--deep);color:#fff}
 .btn-ink:hover{background:var(--lake)}
 .form-msg{margin-top:10px;font-size:.9rem;color:var(--err);min-height:1.3em}
 .form-msg.ok{color:var(--ok)}
+.group-note{background:var(--foam);border:1px solid var(--line-2);border-radius:10px;padding:14px 16px;font-size:.94rem;color:var(--ink-2);margin-bottom:8px}
 
 /* preview */
 .side{position:sticky;top:88px;display:grid;gap:16px}
@@ -215,6 +222,7 @@ body:has(.savebar.show) .toast{bottom:110px}
   <div class="top-in">
     <img src="/assets/mark.png" alt="">
     <p class="title">Masjid Nuh <span>Admin</span></p>
+    <nav class="sections" aria-label="Dashboard sections"><a href="/admin/" aria-current="page">Prayer times</a><a href="/admin/tv/">TV screen</a></nav>
     <span class="spacer"></span>
     <div class="who" id="who" hidden><span class="email" id="whoEmail"></span><span class="avatar" id="whoAvatar" aria-hidden="true"></span></div>
     <a href="/" target="_blank" rel="noopener">View site</a>
@@ -310,6 +318,7 @@ body:has(.savebar.show) .toast{bottom:110px}
 
     <section class="panel" aria-labelledby="ad-h">
       <div class="panel-head"><div><h2 id="ad-h">Admins</h2><p>People who can sign in here with their Microsoft account. Work, school and personal accounts such as Outlook.com all work. Changes here take effect right away, without the Save button.</p></div></div>
+      <p class="group-note" id="groupNote" hidden>Access is limited to members of the masjid’s website admin group in Microsoft 365. To give someone access, add them to that group in the Microsoft 365 admin center or Microsoft Entra. To remove access, take them out of the group. Changes apply the next time they sign in, within 8 hours at most.</p>
       <ul class="hist" id="admins"><li class="empty">Loading…</li></ul>
       <form class="add-admin" id="adminForm" novalidate>
         <label for="adminEmail" class="vh">Email address of the new admin</label>
@@ -353,7 +362,7 @@ body:has(.savebar.show) .toast{bottom:110px}
     if (!r.ok) throw 0;
     const me = await r.json();
     if (!me.signedIn) { location.href = '/auth/login?next=/admin/'; return; }
-    user = { userDetails: me.email, name: me.name, isOwner: me.isOwner };
+    user = { userDetails: me.email, name: me.name, isOwner: me.isOwner, accessMode: me.accessMode };
   } catch (e) { previewMode = true; user = { userDetails: 'preview@masjidnuh.ca', name: 'Preview', isOwner: true }; }
 
   if (user) {
@@ -715,6 +724,10 @@ body:has(.savebar.show) .toast{bottom:110px}
   }
   function renderAdmins(list) {
     $('admins').innerHTML = '';
+    if (user.accessMode === 'groups') {
+      if (!list.length) { $('admins').innerHTML = '<li class="empty">No owner emails are set. Everyone signs in through the group.</li>'; return; }
+      const head = document.createElement('li'); head.className = 'empty'; head.textContent = 'Owners, who can always sign in (set in Cloudflare):'; $('admins').appendChild(head);
+    }
     list.forEach(a => {
       const li = document.createElement('li');
       const left = document.createElement('div');
@@ -723,6 +736,7 @@ body:has(.savebar.show) .toast{bottom:110px}
       t.textContent = a.owner ? 'Owner, set in Cloudflare' : (a.addedBy ? `Added by ${a.addedBy}` + (a.addedAt ? ` on ${niceWhen(a.addedAt, true).split(' at ')[0]}` : '') : '');
       left.appendChild(t); li.appendChild(left);
       if (a.email === user.userDetails) { const s = document.createElement('span'); s.className = 'badge'; s.textContent = 'You'; li.appendChild(s); }
+      else if (user.accessMode === 'groups') { const s = document.createElement('span'); s.className = 'badge'; s.textContent = 'Owner'; li.appendChild(s); }
       else if (a.owner) { const s = document.createElement('span'); s.className = 'badge'; s.textContent = 'Owner'; li.appendChild(s); }
       else {
         const rm = document.createElement('button'); rm.type = 'button'; rm.className = 'link-btn'; rm.textContent = 'Remove';
@@ -744,7 +758,12 @@ body:has(.savebar.show) .toast{bottom:110px}
     const r = await adminCall('POST', { email });
     if (r.ok) { renderAdmins(r.list); $('adminEmail').value = ''; adminMsg(`${email} can now sign in to the dashboard.`, true); } else adminMsg(r.error);
   });
-  async function loadAdmins() { const r = await adminCall('GET'); if (r.ok) renderAdmins(r.list); else $('admins').innerHTML = '<li class="empty">Couldn’t load the admin list.</li>'; }
+  async function loadAdmins() {
+    if (user.accessMode === 'groups') {
+      $('groupNote').hidden = false; $('adminForm').hidden = true; $('adminMsg').hidden = true;
+      $('ad-h').nextElementSibling.textContent = 'Who can sign in to this dashboard.';
+    }
+    const r = await adminCall('GET'); if (r.ok) renderAdmins(r.list); else $('admins').innerHTML = '<li class="empty">Couldn’t load the admin list.</li>'; }
 
   renderAll(); loadHistory(); loadAdmins();
 })();

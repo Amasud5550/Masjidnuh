@@ -1,0 +1,573 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>TV screen | Masjid Nuh admin</title>
+<link rel="icon" href="/assets/mark.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;600;700&family=Zilla+Slab:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --deep:#0D2B3A; --lake:#16475A; --copper:#D08A54; --copper-hi:#E6A672;
+  --mist:#E8EFEE; --foam:#F7FAF9; --ink:#10232D; --ink-2:#4A5F69; --line:#CFDCDB; --line-2:#E2EAE9;
+  --ok:#1D7A5A; --ok-bg:#E5F3EE; --warn:#A35B12; --warn-bg:#FBF0E3; --err:#B23A2E; --err-bg:#FBECEA;
+  --display:"Zilla Slab", Rockwell, Georgia, serif;
+  --body:"Public Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --r:14px;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--mist);color:var(--ink);font:16px/1.5 var(--body)}
+:focus-visible{outline:3px solid var(--copper);outline-offset:2px;border-radius:6px}
+h1,h2,h3{font-family:var(--display);font-weight:600;margin:0;line-height:1.15}
+p{margin:0}
+button,input,select,textarea{font:inherit;color:inherit}
+.vh{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+[hidden]{display:none!important}
+
+.top{background:var(--deep);color:#E9F1F1;position:sticky;top:0;z-index:20}
+.top-in{max-width:1280px;margin:0 auto;padding:0 24px;height:64px;display:flex;align-items:center;gap:16px}
+.top img{height:34px}
+.top .title{font-family:var(--display);font-size:1.2rem;font-weight:600;white-space:nowrap}
+.top .title span{color:#A9C1C6;font-weight:500;margin-left:6px}
+.top .spacer{flex:1}
+.who{display:flex;align-items:center;gap:10px;font-size:.92rem;color:#A9C1C6}
+.avatar{width:32px;height:32px;border-radius:50%;background:var(--copper);color:#1B1007;display:grid;place-items:center;font-weight:700;font-size:.85rem}
+.top a{color:#E9F1F1;text-decoration:none;font-size:.92rem;font-weight:500;padding:8px 12px;border-radius:999px;border:1px solid rgba(255,255,255,.18);white-space:nowrap}
+.top a:hover{border-color:#fff}
+.sections{display:flex;gap:4px;margin-left:12px}
+.top .sections a{border-color:transparent;color:#A9C1C6}
+.top .sections a:hover{color:#fff;border-color:transparent}
+.top .sections a[aria-current=page]{background:rgba(255,255,255,.1);color:#fff}
+
+.page{max-width:1280px;margin:0 auto;padding:32px 24px 120px;display:grid;grid-template-columns:minmax(0,1fr) 440px;gap:28px;align-items:start}
+.page-head{grid-column:1/-1;display:flex;justify-content:space-between;align-items:end;gap:16px;flex-wrap:wrap}
+.page-head h1{font-size:2.1rem}
+.page-head p{color:var(--ink-2);margin-top:4px}
+.main{display:grid;grid-template-columns:minmax(0,1fr);gap:22px;min-width:0}
+.panel{background:#fff;border:1px solid var(--line);border-radius:var(--r);padding:26px}
+.panel-head{display:flex;justify-content:space-between;align-items:start;gap:16px;margin-bottom:18px;flex-wrap:wrap}
+.panel-head h2{font-size:1.45rem}
+.panel-head p{color:var(--ink-2);font-size:.94rem;margin-top:4px;max-width:60ch}
+
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:0;border-radius:999px;padding:11px 18px;font-weight:600;cursor:pointer;text-decoration:none;white-space:nowrap}
+.btn-ink{background:var(--deep);color:#fff}
+.btn-ink:hover{background:var(--lake)}
+.btn-copper{background:var(--copper);color:#1B1007}
+.btn-copper:hover{background:var(--copper-hi)}
+.btn-line{background:#fff;color:var(--ink);border:1.5px solid var(--line)}
+.btn-line:hover{border-color:var(--ink)}
+.btn:disabled{opacity:.6;cursor:wait}
+.btns{display:flex;gap:10px;flex-wrap:wrap}
+
+/* slides list */
+.slist{list-style:none;margin:0;padding:0;display:grid;gap:10px}
+.srow{display:grid;grid-template-columns:168px minmax(0,1fr) auto;gap:16px;align-items:center;padding:12px;border:1px solid var(--line-2);border-radius:12px;background:#fff}
+.srow.off{background:var(--foam)}
+.srow.off .thumb{opacity:.5}
+.thumb{width:168px;aspect-ratio:16/9;border-radius:8px;overflow:hidden;background:var(--deep);position:relative}
+.thumb img{width:100%;height:100%;object-fit:cover;display:block}
+.thumb .t{position:absolute;inset:0;padding:12px 14px;background:linear-gradient(160deg,#1A5268,#0F3446);color:#fff;font-family:var(--display);font-weight:600;font-size:.95rem;line-height:1.2;overflow:hidden}
+.thumb .t::before{content:"";display:block;width:22px;height:3px;border-radius:2px;background:var(--copper);margin-bottom:8px}
+.sinfo b{display:block;font-weight:600;line-height:1.3;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.sinfo span{display:block;font-size:.88rem;color:var(--ink-2);margin-top:2px}
+.sinfo .state{display:inline-block;font-size:.78rem;font-weight:700;border-radius:999px;padding:2px 10px;margin-top:6px}
+.state.live{background:var(--ok-bg);color:var(--ok)}
+.state.later{background:var(--warn-bg);color:var(--warn)}
+.state.done,.state.off{background:var(--mist);color:var(--ink-2)}
+.sctl{display:flex;align-items:center;gap:6px}
+.icon-btn{width:38px;height:38px;border-radius:50%;border:1.5px solid var(--line);background:#fff;cursor:pointer;display:grid;place-items:center;color:var(--ink);padding:0}
+.icon-btn:hover:not(:disabled){border-color:var(--ink)}
+.icon-btn:disabled{opacity:.35;cursor:default}
+.icon-btn svg{width:17px;height:17px}
+.icon-btn.danger{color:var(--err)}
+.switch{display:inline-flex;align-items:center;gap:10px;cursor:pointer;font-weight:600;font-size:.92rem}
+.switch input{appearance:none;width:44px;height:26px;border-radius:999px;background:#C3D0CF;position:relative;cursor:pointer;transition:background .15s;margin:0;flex:none}
+.switch input::after{content:"";position:absolute;top:3px;left:3px;width:20px;height:20px;border-radius:50%;background:#fff;transition:transform .15s;box-shadow:0 1px 2px rgba(0,0,0,.2)}
+.switch input:checked{background:var(--ok)}
+.switch input:checked::after{transform:translateX(18px)}
+.empty{padding:28px;text-align:center;border:1.5px dashed var(--line);border-radius:12px;color:var(--ink-2)}
+.empty b{display:block;color:var(--ink);font-size:1.05rem;margin-bottom:4px}
+
+/* forms */
+.field label,.field .lbl{display:block;font-size:.85rem;font-weight:600;color:var(--ink-2);margin-bottom:6px}
+.field small{display:block;font-size:.82rem;color:var(--ink-2);margin-top:5px}
+input[type=date],input[type=number],input[type=text],input[type=url],input[type=datetime-local],select,textarea{border:1.5px solid var(--line);border-radius:9px;padding:9px 11px;background:#fff;min-height:42px;width:100%}
+textarea{resize:vertical;line-height:1.45}
+input:focus,select:focus,textarea:focus{border-color:var(--deep);outline:none;box-shadow:0 0 0 3px rgba(13,43,58,.12)}
+.grid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+.grid3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+.stack{display:grid;gap:18px}
+.group{padding-top:18px;border-top:1px solid var(--line-2)}
+.group h3{font-family:var(--body);font-size:1rem;font-weight:700;margin-bottom:12px}
+.count{font-size:.8rem;color:var(--ink-2);text-align:right;margin-top:4px}
+.count.over{color:var(--err);font-weight:600}
+.msg{font-size:.92rem;margin-top:12px;min-height:1.4em}
+.msg.ok{color:var(--ok)}
+.msg.err{color:var(--err)}
+.errors{background:var(--err-bg);color:var(--err);border-radius:10px;padding:12px 16px;font-size:.9rem}
+.errors ul{margin:6px 0 0;padding-left:18px}
+
+/* preview */
+.side{position:sticky;top:88px;display:grid;gap:16px}
+.pv{background:var(--deep);border-radius:var(--r);padding:16px;color:#E9F1F1}
+.pv-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
+.pv-head h2{font-size:1.2rem;color:#fff}
+.pv-head a{color:#E6A672;font-weight:600;font-size:.9rem;text-decoration:none}
+.pv-head a:hover{text-decoration:underline}
+.screen{position:relative;width:100%;aspect-ratio:16/9;border-radius:8px;overflow:hidden;background:#061821;box-shadow:0 0 0 6px #050E13, 0 14px 30px rgba(0,0,0,.35)}
+.screen iframe{position:absolute;left:0;top:0;width:1920px;height:1080px;border:0;transform-origin:0 0;pointer-events:none}
+.pv-ctl{margin-top:16px;display:grid;gap:10px}
+.pv-ctl .lbl{font-size:.82rem;color:#A9C1C6;font-weight:600}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{border:1px solid rgba(255,255,255,.22);background:transparent;color:#E9F1F1;border-radius:999px;padding:6px 12px;font-size:.85rem;font-weight:600;cursor:pointer}
+.chip:hover{border-color:#fff}
+.chip[aria-pressed=true]{background:#E9F1F1;color:var(--deep);border-color:#E9F1F1}
+.setup{background:#fff;border:1px solid var(--line);border-radius:var(--r);padding:20px}
+.setup h2{font-size:1.15rem}
+.setup ol{margin:10px 0 0;padding-left:20px;font-size:.92rem;color:var(--ink-2);display:grid;gap:6px}
+.setup code{font-size:.82rem;background:var(--mist);padding:2px 6px;border-radius:5px;color:var(--ink);word-break:break-all}
+
+/* dialog */
+dialog{border:0;border-radius:18px;padding:0;width:min(640px,94vw);max-height:92vh;color:var(--ink);box-shadow:0 30px 80px rgba(5,20,28,.45)}
+dialog::backdrop{background:rgba(8,26,36,.6)}
+.dlg{display:flex;flex-direction:column;max-height:92vh}
+.dlg-head{display:flex;justify-content:space-between;align-items:center;padding:18px 22px;border-bottom:1px solid var(--line)}
+.dlg-head h2{font-size:1.4rem}
+.dlg-body{padding:20px 22px;overflow:auto;display:grid;gap:18px}
+.dlg-foot{display:flex;justify-content:flex-end;gap:10px;padding:16px 22px;border-top:1px solid var(--line);background:var(--foam);border-radius:0 0 18px 18px}
+.drop{position:relative;border:2px dashed var(--line);border-radius:12px;background:var(--foam);aspect-ratio:16/9;display:grid;place-items:center;text-align:center;cursor:pointer;overflow:hidden;color:var(--ink-2)}
+.drop:hover,.drop.over{border-color:var(--deep);color:var(--ink)}
+.drop b{display:block;color:var(--ink);font-size:1.05rem}
+.drop img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;background:#0D2B3A}
+.drop input{position:absolute;inset:0;opacity:0;cursor:pointer}
+.toast{position:fixed;left:50%;bottom:24px;transform:translate(-50%,140%);opacity:0;visibility:hidden;background:var(--ok);color:#fff;padding:13px 20px;border-radius:12px;font-weight:600;z-index:60;transition:transform .25s,opacity .25s,visibility .25s;box-shadow:0 10px 30px rgba(5,20,28,.3);max-width:calc(100vw - 32px)}
+.toast.show{transform:translate(-50%,0);opacity:1;visibility:visible}
+.toast.err{background:var(--err)}
+
+@media (max-width:1100px){.page{grid-template-columns:minmax(0,1fr)}.page-head{order:-2}.side{position:static;order:-1}}
+@media (max-width:820px){.top .title{display:none}.sections{margin-left:0}.who .email{display:none}}
+@media (max-width:640px){
+  .top-in{padding:0 12px;gap:8px}.top a{padding:7px 10px;font-size:.86rem}.top img{height:28px}
+  .page{padding:20px 14px 100px;gap:18px}.panel{padding:18px}
+  .srow{grid-template-columns:110px minmax(0,1fr);gap:12px}.thumb{width:110px}
+  .sctl{grid-column:1/-1;justify-content:flex-end;flex-wrap:wrap}
+  .grid2,.grid3{grid-template-columns:minmax(0,1fr)}
+}
+@media (prefers-reduced-motion:reduce){.toast,.switch input,.switch input::after{transition:none}}
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="top-in">
+    <img src="/assets/mark.png" alt="">
+    <p class="title">Masjid Nuh <span>Admin</span></p>
+    <nav class="sections" aria-label="Dashboard sections"><a href="/admin/">Prayer times</a><a href="/admin/tv/" aria-current="page">TV screen</a></nav>
+    <span class="spacer"></span>
+    <div class="who" id="who" hidden><span class="email" id="whoEmail"></span><span class="avatar" id="whoAvatar" aria-hidden="true"></span></div>
+    <a href="/auth/logout">Sign out</a>
+  </div>
+</header>
+
+<main class="page">
+  <div class="page-head">
+    <div>
+      <h1>TV screen</h1>
+      <p>What the TV in the masjid shows. Changes reach the screen within two minutes.</p>
+    </div>
+    <a class="btn btn-line" href="/tv/" target="_blank" rel="noopener">Open the TV screen</a>
+  </div>
+
+  <div class="main">
+    <section class="panel" aria-labelledby="sl-h">
+      <div class="panel-head">
+        <div><h2 id="sl-h">Slides</h2><p>Posters and notices that take turns on the right side of the screen. Changes here save straight away.</p></div>
+        <div class="btns">
+          <button class="btn btn-ink" type="button" id="addImage">Add a poster</button>
+          <button class="btn btn-line" type="button" id="addText">Add a text notice</button>
+        </div>
+      </div>
+      <ul class="slist" id="slist"><li class="empty">Loading slides…</li></ul>
+    </section>
+
+    <section class="panel" aria-labelledby="st-h">
+      <div class="panel-head"><div><h2 id="st-h">Screen settings</h2><p>The scrolling messages along the bottom, the donation slide, and what shows during prayer.</p></div></div>
+      <form id="tvForm" class="stack" novalidate>
+        <div class="field">
+          <label for="ticker">Messages along the bottom</label>
+          <textarea id="ticker" rows="4" placeholder="Please silence your phone inside the prayer hall."></textarea>
+          <small>One message per line, up to 12. They take turns every few seconds. The website announcement also appears here when it’s on.</small>
+        </div>
+
+        <div class="group">
+          <h3>Donation slide</h3>
+          <label class="switch"><input type="checkbox" id="dOn"> <span>Show a donation slide with a QR code</span></label>
+          <div class="grid2" style="margin-top:14px">
+            <div class="field"><label for="dTitle">Heading</label><input type="text" id="dTitle" maxlength="80"></div>
+            <div class="field"><label for="dLink">Donation page</label><input type="url" id="dLink" placeholder="https://donorchoice.ca/embedded/masjidnuh"></div>
+          </div>
+        </div>
+
+        <div class="group">
+          <h3>During prayer</h3>
+          <label class="switch"><input type="checkbox" id="pOn"> <span>Cover the screen with a “prayer in progress” message after each iqamah</span></label>
+          <div class="grid2" style="margin-top:14px">
+            <div class="field"><label for="pMin">Minutes after iqamah</label><input type="number" id="pMin" min="1" max="30" step="1"></div>
+            <div class="field"><label for="jMin">Minutes after the Jumu’ah khutbah starts</label><input type="number" id="jMin" min="10" max="120" step="1"></div>
+          </div>
+        </div>
+
+        <div class="group">
+          <h3>Date and clock</h3>
+          <div class="grid2">
+            <div class="field">
+              <label for="hAdj">Hijri date</label>
+              <select id="hAdj">
+                <option value="-2">2 days earlier</option><option value="-1">1 day earlier</option><option value="0">As calculated (Umm al-Qura)</option><option value="1">1 day later</option><option value="2">2 days later</option>
+              </select>
+              <small id="hPrev"></small>
+            </div>
+            <div class="field"><span class="lbl">Clock</span><label class="switch" style="margin-top:8px"><input type="checkbox" id="c24"> <span>Use 24-hour time</span></label></div>
+          </div>
+        </div>
+
+        <div><button class="btn btn-copper" type="submit" id="tvSave">Save screen settings</button></div>
+        <div id="tvErr" class="errors" hidden></div>
+      </form>
+    </section>
+  </div>
+
+  <aside class="side" aria-label="Preview">
+    <div class="pv">
+      <div class="pv-head"><h2>Preview</h2><a href="/tv/" target="_blank" rel="noopener" id="pvOpen">Open full size</a></div>
+      <div class="screen" id="screen"><iframe id="pvFrame" title="Preview of the TV screen" src="/tv/?preview=1" tabindex="-1"></iframe></div>
+      <div class="pv-ctl">
+        <span class="lbl">Show the screen at</span>
+        <div class="chips" id="chips">
+          <button type="button" class="chip" data-p="now" aria-pressed="true">Right now</button>
+          <button type="button" class="chip" data-p="iqamah">Iqamah countdown</button>
+          <button type="button" class="chip" data-p="prayer">During prayer</button>
+          <button type="button" class="chip" data-p="friday">Friday</button>
+          <button type="button" class="chip" data-p="night">After Isha</button>
+        </div>
+      </div>
+    </div>
+    <div class="setup">
+      <h2>Setting up the TV</h2>
+      <ol>
+        <li>Connect a small computer to the TV and to the internet.</li>
+        <li>Open Chrome and go to <code id="tvUrl"></code></li>
+        <li>Press F11 (Windows) or Ctrl+Cmd+F (Mac) for full screen.</li>
+        <li>Turn off sleep and screen saver so it stays on.</li>
+      </ol>
+      <p style="font-size:.88rem;color:var(--ink-2);margin-top:10px">The setup guide in README.md explains how to make it start by itself when the computer turns on.</p>
+    </div>
+  </aside>
+</main>
+
+<dialog id="dlg" aria-labelledby="dlgTitle">
+  <form class="dlg" id="slideForm" method="dialog" novalidate>
+    <div class="dlg-head"><h2 id="dlgTitle">Add a poster</h2><button type="button" class="icon-btn" id="dlgClose" aria-label="Close"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
+    <div class="dlg-body">
+      <div id="imgFields" class="stack">
+        <div class="drop" id="drop">
+          <div id="dropText"><b>Choose a picture</b>or drag one here. A landscape image (1920 × 1080) fills the screen best. Portrait posters work too.</div>
+          <img id="dropImg" alt="" hidden>
+          <input type="file" id="file" accept="image/jpeg,image/png,image/webp" aria-label="Choose a picture">
+        </div>
+        <p class="field" id="chgHint" hidden><small>Click the picture to replace it.</small></p>
+        <div class="field"><label for="sName">Name</label><input type="text" id="sName" maxlength="90" placeholder="Eid dinner poster"><small>Only shown in your slide list, to tell posters apart.</small></div>
+      </div>
+      <div id="txtFields" class="stack">
+        <div class="field"><label for="sTitle">Heading</label><input type="text" id="sTitle" maxlength="90" placeholder="Youth night this Friday"><p class="count" id="tCount">0 / 90</p></div>
+        <div class="field"><label for="sBody">Message</label><textarea id="sBody" rows="4" maxlength="420" placeholder="Ages 13 to 18, after Maghrib in the basement hall. Pizza provided."></textarea><p class="count" id="bCount">0 / 420</p></div>
+      </div>
+      <div class="group">
+        <h3>QR code (optional)</h3>
+        <div class="grid2">
+          <div class="field"><label for="sLink">Web address</label><input type="url" id="sLink" placeholder="https://"></div>
+          <div class="field"><label for="sLinkLabel">Caption under the code</label><input type="text" id="sLinkLabel" maxlength="40" placeholder="Scan to register"></div>
+        </div>
+      </div>
+      <div class="group">
+        <h3>When to show it</h3>
+        <div class="grid3">
+          <div class="field"><label for="sStart">From</label><input type="date" id="sStart"></div>
+          <div class="field"><label for="sEnd">Until</label><input type="date" id="sEnd"></div>
+          <div class="field"><label for="sSec">Seconds on screen</label><input type="number" id="sSec" min="5" max="60" step="1" value="12"></div>
+        </div>
+        <p style="font-size:.82rem;color:var(--ink-2);margin-top:6px">Leave the dates empty to show it every day. It stops showing after the “Until” date.</p>
+      </div>
+      <div id="dlgErr" class="errors" hidden></div>
+    </div>
+    <div class="dlg-foot">
+      <button type="button" class="btn btn-line" id="dlgCancel">Cancel</button>
+      <button type="submit" class="btn btn-copper" id="dlgSave">Save slide</button>
+    </div>
+  </form>
+</dialog>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script src="/js/masjid.js"></script>
+<script>
+(async function () {
+  const M = window.Masjid;
+  const $ = id => document.getElementById(id);
+  const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]);
+  let slides = [], tv = null, prayer = M.normalize(null), user = null;
+
+  /* ---------- who is signed in ---------- */
+  try {
+    const me = await (await fetch('/api/me', { cache: 'no-store' })).json();
+    if (!me.signedIn) { location.href = '/auth/login?next=/admin/tv/'; return; }
+    user = me; $('who').hidden = false; $('whoEmail').textContent = me.email; $('whoAvatar').textContent = (me.email || '?')[0].toUpperCase();
+  } catch (e) {}
+  $('tvUrl').textContent = location.origin + '/tv';
+
+  /* ---------- helpers ---------- */
+  let tt;
+  function toast(msg, err) { const t = $('toast'); t.textContent = msg; t.classList.toggle('err', !!err); t.classList.add('show'); clearTimeout(tt); tt = setTimeout(() => t.classList.remove('show'), 3400); }
+  async function api(method, url, body) {
+    const r = await fetch(url, { method, headers: body ? { 'Content-Type': 'application/json' } : {}, body: body ? JSON.stringify(body) : undefined, cache: 'no-store' });
+    const j = await r.json().catch(() => ({}));
+    if (r.status === 401) throw { list: ['Your sign-in has expired. Reload the page to sign in again.'] };
+    if (!r.ok) throw { list: j.details || [j.error || 'Something went wrong. Try again.'] };
+    return j;
+  }
+  const friendly = d => { const [y, m, dd] = d.split('-').map(Number); return new Date(Date.UTC(y, m - 1, dd, 12)).toLocaleDateString('en-CA', { timeZone: 'UTC', month: 'short', day: 'numeric' }); };
+  const todayStr = () => { const p = M.todayParts(); return M.ymd(p.y, p.m, p.d); };
+  function showErrors(el, list) { el.innerHTML = `<strong>Couldn’t save.</strong><ul>${list.map(x => `<li>${esc(x)}</li>`).join('')}</ul>`; el.hidden = false; }
+
+  /* ---------- preview ---------- */
+  function fitPreview() { const w = $('screen').clientWidth; $('pvFrame').style.transform = `scale(${w / 1920})`; }
+  addEventListener('resize', fitPreview); fitPreview();
+  let pvMode = 'now';
+  function pvTime(mode) {
+    const p = M.todayParts(), d = M.day(prayer, p.y, p.m, p.d), t = new Date();
+    const pad = n => String(n).padStart(2, '0');
+    const fmt = (x, y = p) => { const q = M.parts(x); return `${q.year}-${pad(q.month)}-${pad(q.day)}T${pad(q.hour)}:${pad(q.minute)}`; };
+    if (mode === 'iqamah') { const k = M.PRAYERS.find(k => d.iqamah[k] > t) || 'dhuhr'; const x = new Date(d.iqamah[k] - Math.min(5 * 60e3, (d.iqamah[k] - d.adhan[k]) / 2)); return fmt(x); }
+    if (mode === 'prayer') { const k = M.PRAYERS.find(k => d.iqamah[k] > t) || 'maghrib'; return fmt(new Date(d.iqamah[k].getTime() + 2 * 60e3)); }
+    if (mode === 'friday') { let n = { y: p.y, m: p.m, d: p.d }; for (let i = 0; i < 7; i++) { if (new Date(Date.UTC(n.y, n.m - 1, n.d, 12)).getUTCDay() === 5) break; n = M.addDays(n.y, n.m, n.d, 1); } const fd = M.day(prayer, n.y, n.m, n.d); return fd.jumuah[0] ? fmt(new Date(fd.jumuah[0].at - 12 * 60e3)) : ''; }
+    if (mode === 'night') return fmt(new Date(d.iqamah.isha.getTime() + 45 * 60e3));
+    return '';
+  }
+  function reloadPreview() {
+    const at = pvTime(pvMode);
+    $('pvFrame').src = '/tv/?preview=1' + (at ? '&at=' + at : '') + '&r=' + Date.now();
+    $('pvOpen').href = '/tv/' + (at ? '?at=' + at : '');
+  }
+  $('chips').addEventListener('click', e => {
+    const b = e.target.closest('.chip'); if (!b) return;
+    pvMode = b.dataset.p; document.querySelectorAll('.chip').forEach(c => c.setAttribute('aria-pressed', c === b)); reloadPreview();
+  });
+
+  /* ---------- slides list ---------- */
+  function status(s) {
+    const t = todayStr();
+    if (!s.enabled) return ['off', 'Off'];
+    if (s.end && s.end < t) return ['done', `Ended ${friendly(s.end)}`];
+    if (s.start && s.start > t) return ['later', `Starts ${friendly(s.start)}`];
+    return ['live', s.end ? `Showing until ${friendly(s.end)}` : 'Showing now'];
+  }
+  const ICON = {
+    up: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 15l6-6 6 6"/></svg>',
+    down: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>',
+    edit: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20h4L19 9l-4-4L4 16z"/><path d="M13.5 6.5l4 4"/></svg>',
+    del: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 7h14M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3"/></svg>'
+  };
+  function renderSlides() {
+    const ul = $('slist');
+    if (!slides.length) { ul.innerHTML = '<li class="empty"><b>No slides yet</b>Add a poster for your next event, or a short text notice. Until then the screen shows a welcome slide and the donation slide.</li>'; return; }
+    ul.innerHTML = slides.map((s, i) => {
+      const [cls, label] = status(s);
+      const name = s.kind === 'image' ? (s.title || 'Poster') : s.title;
+      const meta = [s.kind === 'image' ? 'Poster' : 'Text notice', `${s.seconds} seconds`, s.link ? 'QR code' : ''].filter(Boolean).join(', ');
+      return `<li class="srow${s.enabled ? '' : ' off'}" data-id="${s.id}">
+        <div class="thumb">${s.kind === 'image' && s.image ? `<img src="${esc(s.image)}" alt="" loading="lazy">` : `<div class="t">${esc(s.title)}</div>`}</div>
+        <div class="sinfo"><b>${esc(name)}</b><span>${esc(meta)}</span><span class="state ${cls}">${esc(label)}</span></div>
+        <div class="sctl">
+          <label class="switch" title="Show on the TV"><input type="checkbox" data-a="toggle" ${s.enabled ? 'checked' : ''} aria-label="Show ${esc(name)} on the TV"></label>
+          <button type="button" class="icon-btn" data-a="up" aria-label="Move ${esc(name)} earlier" ${i === 0 ? 'disabled' : ''}>${ICON.up}</button>
+          <button type="button" class="icon-btn" data-a="down" aria-label="Move ${esc(name)} later" ${i === slides.length - 1 ? 'disabled' : ''}>${ICON.down}</button>
+          <button type="button" class="icon-btn" data-a="edit" aria-label="Edit ${esc(name)}">${ICON.edit}</button>
+          <button type="button" class="icon-btn danger" data-a="del" aria-label="Delete ${esc(name)}">${ICON.del}</button>
+        </div></li>`;
+    }).join('');
+  }
+  const fields = s => ({ kind: s.kind, title: s.title, body: s.body, link: s.link, linkLabel: s.linkLabel, start: s.start, end: s.end, seconds: s.seconds, enabled: s.enabled });
+  $('slist').addEventListener('click', async e => {
+    const b = e.target.closest('[data-a]'); if (!b || b.dataset.a === 'toggle') return;
+    const row = b.closest('.srow'), id = +row.dataset.id, i = slides.findIndex(s => s.id === id), s = slides[i];
+    try {
+      if (b.dataset.a === 'edit') return openDialog(s.kind, s);
+      if (b.dataset.a === 'del') {
+        if (!confirm(`Delete “${s.title || 'this poster'}”? It will disappear from the TV.`)) return;
+        await api('DELETE', `/api/slides/${id}`); slides.splice(i, 1); renderSlides(); reloadPreview(); toast('Slide deleted.');
+      }
+      if (b.dataset.a === 'up' || b.dataset.a === 'down') {
+        const j = b.dataset.a === 'up' ? i - 1 : i + 1;
+        const ids = slides.map(x => x.id); [ids[i], ids[j]] = [ids[j], ids[i]];
+        slides = await api('POST', '/api/slides/order', { ids }); renderSlides(); reloadPreview();
+        const again = $('slist').querySelector(`[data-id="${id}"] [data-a="${b.dataset.a}"]`); if (again && !again.disabled) again.focus();
+      }
+    } catch (err) { toast((err.list || ['Something went wrong.'])[0], true); }
+  });
+  $('slist').addEventListener('change', async e => {
+    if (e.target.dataset.a !== 'toggle') return;
+    const id = +e.target.closest('.srow').dataset.id, s = slides.find(x => x.id === id);
+    try {
+      const saved = await api('PUT', `/api/slides/${id}`, { ...fields(s), enabled: e.target.checked });
+      Object.assign(s, saved); renderSlides(); reloadPreview(); toast(saved.enabled ? 'Slide is on. It will show on the TV.' : 'Slide is off. It won’t show on the TV.');
+    } catch (err) { e.target.checked = !e.target.checked; toast((err.list || ['Something went wrong.'])[0], true); }
+  });
+
+  /* ---------- add / edit dialog ---------- */
+  let editing = null, kind = 'image', newImage = null;
+  function openDialog(k, s) {
+    kind = k; editing = s || null; newImage = null;
+    $('dlgTitle').textContent = s ? (k === 'image' ? 'Edit poster' : 'Edit text notice') : (k === 'image' ? 'Add a poster' : 'Add a text notice');
+    $('imgFields').hidden = k !== 'image'; $('txtFields').hidden = k !== 'text';
+    $('sName').value = k === 'image' && s ? s.title || '' : '';
+    $('sTitle').value = k === 'text' && s ? s.title || '' : '';
+    $('sBody').value = s ? s.body || '' : '';
+    $('sLink').value = s ? s.link || '' : '';
+    $('sLinkLabel').value = s ? s.linkLabel || '' : '';
+    $('sStart').value = s ? s.start || '' : '';
+    $('sEnd').value = s ? s.end || '' : '';
+    $('sSec').value = s ? s.seconds : 12;
+    $('file').value = '';
+    const img = $('dropImg');
+    $('chgHint').hidden = !(s && s.image);
+    if (s && s.image) { img.src = s.image; img.hidden = false; $('dropText').hidden = true; } else { img.hidden = true; img.removeAttribute('src'); $('dropText').hidden = false; }
+    $('dlgErr').hidden = true; counts();
+    $('dlg').showModal();
+    (k === 'image' ? $('file') : $('sTitle')).focus();
+  }
+  $('addImage').addEventListener('click', () => openDialog('image'));
+  $('addText').addEventListener('click', () => openDialog('text'));
+  $('dlgClose').addEventListener('click', () => $('dlg').close());
+  $('dlgCancel').addEventListener('click', () => $('dlg').close());
+  function counts() {
+    const t = $('sTitle').value.length, b = $('sBody').value.length;
+    $('tCount').textContent = `${t} / 90`; $('bCount').textContent = `${b} / 420`;
+  }
+  $('sTitle').addEventListener('input', counts); $('sBody').addEventListener('input', counts);
+
+  // Shrink pictures to fit the screen before uploading
+  function resize(file) {
+    return new Promise((res, rej) => {
+      if (!/^image\/(jpeg|png|webp)$/.test(file.type)) return rej('Choose a JPEG, PNG or WebP picture.');
+      if (file.size > 25e6) return rej('That picture is very large. Choose one under 25 MB.');
+      const url = URL.createObjectURL(file), im = new Image();
+      im.onload = () => {
+        const s = Math.min(1, 1920 / im.naturalWidth, 1080 / im.naturalHeight);
+        const w = Math.round(im.naturalWidth * s), h = Math.round(im.naturalHeight * s);
+        const c = document.createElement('canvas'); c.width = w; c.height = h;
+        const g = c.getContext('2d'); g.fillStyle = '#0D2B3A'; g.fillRect(0, 0, w, h); g.drawImage(im, 0, 0, w, h);
+        URL.revokeObjectURL(url);
+        let q = .88, out = c.toDataURL('image/jpeg', q);
+        while (out.length * .75 > 1.35e6 && q > .5) { q -= .08; out = c.toDataURL('image/jpeg', q); }
+        if (out.length * .75 > 1.45e6) return rej('That picture is too detailed to upload. Try a smaller one.');
+        res(out);
+      };
+      im.onerror = () => { URL.revokeObjectURL(url); rej('That file couldn’t be opened as a picture.'); };
+      im.src = url;
+    });
+  }
+  async function takeFile(f) {
+    if (!f) return;
+    try {
+      newImage = await resize(f);
+      $('dropImg').src = newImage; $('dropImg').hidden = false; $('dropText').hidden = true; $('dlgErr').hidden = true;
+      if (!$('sName').value) $('sName').value = f.name.replace(/\.[a-z0-9]+$/i, '').replace(/[-_]+/g, ' ').slice(0, 90);
+    } catch (msg) { showErrors($('dlgErr'), [msg]); }
+  }
+  $('file').addEventListener('change', e => takeFile(e.target.files[0]));
+  ['dragenter', 'dragover'].forEach(ev => $('drop').addEventListener(ev, e => { e.preventDefault(); $('drop').classList.add('over'); }));
+  ['dragleave', 'drop'].forEach(ev => $('drop').addEventListener(ev, e => { e.preventDefault(); $('drop').classList.remove('over'); }));
+  $('drop').addEventListener('drop', e => takeFile(e.dataTransfer.files[0]));
+
+  $('slideForm').addEventListener('submit', async e => {
+    e.preventDefault();
+    const body = {
+      kind, title: kind === 'image' ? $('sName').value : $('sTitle').value, body: kind === 'text' ? $('sBody').value : '',
+      link: $('sLink').value.trim(), linkLabel: $('sLinkLabel').value, start: $('sStart').value, end: $('sEnd').value,
+      seconds: parseInt($('sSec').value, 10) || 12, enabled: editing ? editing.enabled : true
+    };
+    const errs = [];
+    if (kind === 'image' && !newImage && !(editing && editing.image)) errs.push('Choose a picture for the poster.');
+    if (kind === 'text' && !body.title.trim()) errs.push('Add a heading for the notice.');
+    if (body.link && !/^https:\/\//i.test(body.link)) errs.push('The QR code address must start with https://');
+    if (body.start && body.end && body.end < body.start) errs.push('The “Until” date must be on or after the “From” date.');
+    if (errs.length) return showErrors($('dlgErr'), errs);
+    if (newImage) body.image = newImage;
+    $('dlgSave').disabled = true; $('dlgSave').textContent = 'Saving…';
+    try {
+      if (editing) { const saved = await api('PUT', `/api/slides/${editing.id}`, body); Object.assign(editing, saved); }
+      else slides.push(await api('POST', '/api/slides', body));
+      $('dlg').close(); renderSlides(); reloadPreview();
+      toast(editing ? 'Slide saved.' : 'Slide added. It will show on the TV within two minutes.');
+    } catch (err) { showErrors($('dlgErr'), err.list || ['Something went wrong. Try again.']); }
+    finally { $('dlgSave').disabled = false; $('dlgSave').textContent = 'Save slide'; }
+  });
+
+  /* ---------- screen settings ---------- */
+  function fillTv() {
+    $('ticker').value = (tv.ticker || []).join('\n');
+    $('dOn').checked = !!(tv.donateSlide && tv.donateSlide.on);
+    $('dTitle').value = (tv.donateSlide && tv.donateSlide.title) || '';
+    $('dLink').value = (tv.donateSlide && tv.donateSlide.link) || '';
+    $('pOn').checked = !!(tv.prayerScreen && tv.prayerScreen.on);
+    $('pMin').value = (tv.prayerScreen && tv.prayerScreen.minutes) || 10;
+    $('jMin').value = tv.jumuahMinutes || 45;
+    $('hAdj').value = String(tv.hijriAdjust || 0);
+    $('c24').checked = !!tv.clock24;
+    hijriPreview();
+  }
+  function hijriPreview() {
+    const adj = +$('hAdj').value;
+    try {
+      const d = new Date(Date.now() + adj * 864e5);
+      const p = {}; new Intl.DateTimeFormat('en-u-ca-islamic-umalqura-nu-latn', { timeZone: M.TZ, day: 'numeric', month: 'numeric', year: 'numeric' }).formatToParts(d).forEach(x => p[x.type] = x.value);
+      const names = ['Muharram', 'Safar', 'Rabi al-Awwal', 'Rabi al-Thani', 'Jumada al-Ula', 'Jumada al-Akhirah', 'Rajab', 'Sha’ban', 'Ramadan', 'Shawwal', 'Dhu al-Qa’dah', 'Dhu al-Hijjah'];
+      $('hPrev').textContent = `Today will show as ${p.day} ${names[+p.month - 1]} ${String(p.year).replace(/\D/g, '')} AH.`;
+    } catch (e) { $('hPrev').textContent = ''; }
+  }
+  $('hAdj').addEventListener('change', hijriPreview);
+  $('tvForm').addEventListener('submit', async e => {
+    e.preventDefault();
+    const lines = $('ticker').value.split('\n').map(x => x.trim()).filter(Boolean);
+    const body = {
+      ticker: lines,
+      donateSlide: { on: $('dOn').checked, title: $('dTitle').value, link: $('dLink').value.trim() },
+      prayerScreen: { on: $('pOn').checked, minutes: parseInt($('pMin').value, 10) },
+      jumuahMinutes: parseInt($('jMin').value, 10),
+      hijriAdjust: parseInt($('hAdj').value, 10),
+      clock24: $('c24').checked
+    };
+    const errs = [];
+    if (lines.length > 12) errs.push('Use 12 messages or fewer along the bottom.');
+    if (lines.some(l => l.length > 160)) errs.push('Each bottom message must be 160 characters or fewer.');
+    if (body.donateSlide.on && !/^https:\/\//i.test(body.donateSlide.link)) errs.push('The donation page must be a web address starting with https://');
+    if (!(body.prayerScreen.minutes >= 1 && body.prayerScreen.minutes <= 30)) errs.push('Minutes after iqamah must be between 1 and 30.');
+    if (!(body.jumuahMinutes >= 10 && body.jumuahMinutes <= 120)) errs.push('Minutes after the khutbah must be between 10 and 120.');
+    if (errs.length) return showErrors($('tvErr'), errs);
+    $('tvErr').hidden = true; $('tvSave').disabled = true; $('tvSave').textContent = 'Saving…';
+    try { tv = await api('PUT', '/api/tv', body); fillTv(); reloadPreview(); toast('Screen settings saved. The TV updates within two minutes.'); }
+    catch (err) { showErrors($('tvErr'), err.list || ['Something went wrong. Try again.']); }
+    finally { $('tvSave').disabled = false; $('tvSave').textContent = 'Save screen settings'; }
+  });
+
+  /* ---------- load ---------- */
+  try {
+    const [a, b, c] = await Promise.all([api('GET', '/api/slides'), fetch('/api/tv', { cache: 'no-store' }).then(r => r.json()), M.load('/api/settings')]);
+    slides = a; tv = b.settings; prayer = c.settings;
+    renderSlides(); fillTv();
+  } catch (err) { $('slist').innerHTML = `<li class="empty"><b>Couldn’t load the slides</b>${esc((err.list || ['Reload the page to try again.'])[0])}</li>`; }
+})();
+</script>
+</body>
+</html>

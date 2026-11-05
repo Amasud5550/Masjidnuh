@@ -1,5 +1,7 @@
 import { json, requireAdmin, errorResponse } from '../../lib/guard.js';
-import { listAdmins, addAdmin, removeAdmin, owners, normEmail } from '../../lib/db.js';
+import { listAdmins, addAdmin, removeAdmin, owners, normEmail, groupMode } from '../../lib/db.js';
+
+const GROUPS_MSG = 'Access is managed with Microsoft Entra groups. Add or remove people from the group in Microsoft 365 instead.';
 
 const EMAIL = /^[^\s@<>"]{1,64}@[^\s@<>"]{1,190}\.[a-z]{2,}$/i;
 
@@ -14,6 +16,7 @@ export async function onRequestGet(context) {
 export async function onRequestPost(context) {
   const auth = await requireAdmin(context);
   if (auth instanceof Response) return auth;
+  if (groupMode(context.env)) return json({ error: GROUPS_MSG }, 400);
   let body; try { body = await context.request.json(); } catch { return json({ error: 'The request body must be JSON.' }, 400); }
   const email = normEmail(body && body.email);
   if (!EMAIL.test(email)) return json({ error: 'Enter a valid email address, like name@outlook.com.' }, 400);
@@ -30,6 +33,7 @@ export async function onRequestPost(context) {
 export async function onRequestDelete(context) {
   const auth = await requireAdmin(context);
   if (auth instanceof Response) return auth;
+  if (groupMode(context.env)) return json({ error: GROUPS_MSG }, 400);
   const email = normEmail(new URL(context.request.url).searchParams.get('email'));
   if (owners(context.env).includes(email)) return json({ error: 'Owners are set in the Cloudflare settings (ADMIN_EMAILS) and can only be removed there.' }, 400);
   if (email === normEmail(auth.user.email)) return json({ error: 'You can’t remove yourself. Ask another admin to do it.' }, 400);

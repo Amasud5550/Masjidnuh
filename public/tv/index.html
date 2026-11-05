@@ -1,0 +1,486 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Masjid Nuh | Prayer screen</title>
+<link rel="icon" href="/assets/mark.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Public+Sans:wght@400;500;600;700&family=Zilla+Slab:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --deep:#0D2B3A; --deep-2:#0A2230; --lake:#16475A; --lake-2:#1F5A6F;
+  --copper:#D08A54; --copper-hi:#E6A672; --copper-ink:#1B1007;
+  --on:#E9F1F1; --on-2:#A9C1C6; --on-3:#7F9AA1;
+  --line:rgba(255,255,255,.11);
+  --display:"Zilla Slab", Rockwell, Georgia, serif;
+  --body:"Public Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --arabic:"Amiri", "Traditional Arabic", serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;background:#061821;overflow:hidden}
+body{font-family:var(--body);color:var(--on);-webkit-font-smoothing:antialiased}
+body.idle{cursor:none}
+
+/* A fixed 1920x1080 stage, scaled to fit any screen */
+#stage{position:absolute;left:50%;top:50%;width:1920px;height:1080px;transform-origin:center;overflow:hidden;
+  background:radial-gradient(1100px 620px at 82% 0%,#1B536A 0%,rgba(27,83,106,0) 62%),radial-gradient(900px 500px at 0% 100%,rgba(22,71,90,.55) 0%,rgba(22,71,90,0) 70%),linear-gradient(180deg,#0E2F3F 0%,var(--deep) 55%,#0B2533 100%)}
+
+/* digits sit in fixed cells so numbers never jiggle */
+.d{display:inline-block;width:.58em;text-align:center}
+.c{display:inline-block;width:.28em;text-align:center;position:relative;top:-.06em}
+
+/* ---------- left: clock, dates, next prayer ---------- */
+.left{position:absolute;left:56px;top:40px;width:704px;height:590px;display:flex;flex-direction:column}
+.clock{font-family:var(--display);font-weight:600;font-size:196px;line-height:.92;color:#fff;letter-spacing:-.01em;white-space:nowrap}
+.clock .sec{font-size:76px;color:var(--copper-hi);font-weight:500;margin-left:10px}
+.clock .ap{font-size:56px;color:var(--on-2);font-weight:500;margin-left:14px;letter-spacing:.02em}
+.dates{margin-top:22px}
+.greg{font-family:var(--display);font-weight:600;font-size:42px;line-height:1.2;color:#fff}
+.hijri{font-size:34px;line-height:1.3;color:var(--copper-hi);font-weight:500;margin-top:4px}
+.hijri-ar{font-family:var(--arabic);font-size:44px;line-height:1.35;color:var(--on-2);direction:rtl;text-align:left;margin-top:2px}
+
+.upnext{margin-top:auto;border-top:1px solid var(--line);padding-top:22px}
+.next-label{font-size:32px;color:var(--on-2);font-weight:500}
+.next-label b{color:#fff;font-weight:600}
+.count{font-family:var(--display);font-weight:600;font-size:118px;line-height:1;color:var(--copper-hi);margin-top:6px;white-space:nowrap}
+.next-sub{font-size:28px;color:var(--on-2);margin-top:10px}
+.next-sub b{color:#fff;font-weight:600}
+.upnext.urgent .count{color:#fff}
+.upnext.urgent .next-sub{color:var(--copper-hi);font-weight:600}
+
+/* ---------- right: slides ---------- */
+.slides{position:absolute;left:800px;top:40px;width:1064px;height:590px;border-radius:30px;overflow:hidden;background:var(--lake);
+  box-shadow:0 30px 80px rgba(0,0,0,.35), inset 0 0 0 1px rgba(255,255,255,.08)}
+.slide{position:absolute;inset:0;opacity:0;transition:opacity 1.1s ease}
+.slide.show{opacity:1}
+.slide .bg{position:absolute;inset:-40px;background-size:cover;background-position:center;filter:blur(36px) brightness(.45) saturate(1.1)}
+.slide .fg{position:absolute;inset:0;width:100%;height:100%;object-fit:contain}
+.progress{position:absolute;left:0;bottom:0;height:5px;width:0;background:var(--copper);z-index:5}
+
+.tslide{position:absolute;inset:0;padding:66px 70px;display:flex;gap:56px;align-items:center;
+  background:radial-gradient(700px 420px at 100% 0%,rgba(208,138,84,.22),rgba(208,138,84,0) 70%),linear-gradient(160deg,#1A5268 0%,#123E50 55%,#0F3446 100%)}
+.tslide .txt{flex:1;min-width:0}
+.tslide h2{font-family:var(--display);font-weight:600;font-size:68px;line-height:1.08;color:#fff;
+  display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.tslide p{font-size:34px;line-height:1.42;color:var(--on);margin-top:26px;white-space:pre-line;
+  display:-webkit-box;-webkit-line-clamp:6;-webkit-box-orient:vertical;overflow:hidden}
+.tslide .bar{width:84px;height:6px;border-radius:3px;background:var(--copper);margin-bottom:34px}
+.tslide .mark{position:absolute;right:-60px;bottom:-70px;width:420px;opacity:.07;pointer-events:none}
+.qr{flex:none;background:#fff;border-radius:26px;padding:22px 22px 16px;width:300px;text-align:center;color:var(--ink,#10232D);box-shadow:0 16px 40px rgba(0,0,0,.3)}
+.qr svg{display:block;width:256px;height:256px}
+.qr span{display:block;font-weight:600;font-size:24px;line-height:1.25;margin-top:12px;color:#10232D}
+.slide .qr.float{position:absolute;right:28px;bottom:28px;width:236px;padding:16px 16px 12px;border-radius:20px}
+.slide .qr.float svg{width:204px;height:204px}
+.slide .qr.float span{font-size:20px;margin-top:8px}
+
+.welcome{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;padding:70px 76px;
+  background:radial-gradient(760px 440px at 100% 0%,rgba(208,138,84,.2),rgba(208,138,84,0) 70%),linear-gradient(160deg,#1A5268 0%,#123E50 55%,#0F3446 100%)}
+.welcome .ar{font-family:var(--arabic);font-size:96px;line-height:1.35;color:var(--copper-hi);direction:rtl;text-align:left}
+.welcome .tr{font-family:var(--display);font-weight:500;font-size:40px;line-height:1.3;color:#fff;margin-top:14px;max-width:24ch}
+.welcome .ref{font-size:26px;color:var(--on-2);margin-top:12px}
+.welcome .hello{font-size:32px;color:var(--on);margin-top:40px;padding-top:30px;border-top:1px solid var(--line)}
+
+/* ---------- strip + prayer tiles ---------- */
+.strip{position:absolute;left:56px;right:56px;top:650px;height:40px;display:flex;justify-content:space-between;align-items:center;font-size:26px;color:var(--on-2)}
+.strip b{color:#fff;font-weight:600}
+.strip .jm{display:flex;gap:28px}
+.strip .jm span b{margin-left:10px}
+
+.tiles{position:absolute;left:56px;right:56px;top:700px;height:232px;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,.74fr) repeat(4,minmax(0,1fr));grid-template-rows:232px;align-items:stretch;gap:16px}
+.tiles > .sun{order:0}
+.tile{position:relative;border-radius:24px;background:rgba(255,255,255,.055);border:1px solid var(--line);padding:22px 24px 20px;display:flex;flex-direction:column;transition:background .6s,opacity .6s,border-color .6s}
+.tile .nm{display:flex;justify-content:space-between;align-items:baseline;gap:8px}
+.tile .en{font-family:var(--display);font-weight:600;font-size:38px;line-height:1;color:#fff;white-space:nowrap}
+.tile .ar{font-family:var(--arabic);font-size:32px;line-height:1;color:var(--copper-hi)}
+.tile .row{display:flex;justify-content:space-between;align-items:baseline;margin-top:16px;padding-bottom:14px;border-bottom:1px solid var(--line)}
+.tile .lbl{font-size:22px;color:var(--on-2);font-weight:500}
+.tile .ad{font-size:32px;font-weight:600;color:var(--on)}
+.tile .iq{display:flex;justify-content:space-between;align-items:baseline;margin-top:auto}
+.tile .big{font-family:var(--display);font-weight:600;font-size:70px;line-height:.95;color:#fff;letter-spacing:-.01em}
+.tile.sun .big{color:var(--on-2);font-size:60px}
+.tile.sun .row{border-color:transparent}
+.tile.passed{opacity:.42}
+.tile.next{background:linear-gradient(160deg,#E2A06C 0%,var(--copper) 55%,#B9733F 100%);border-color:transparent;box-shadow:0 18px 44px rgba(208,138,84,.28)}
+.tile.next .en,.tile.next .big,.tile.next .ad{color:var(--copper-ink)}
+.tile.next .ar,.tile.next .lbl{color:rgba(27,16,7,.72)}
+.tile.next .row{border-color:rgba(27,16,7,.18)}
+.tile.now{background:rgba(208,138,84,.16);border:2px solid var(--copper);box-shadow:0 0 0 6px rgba(208,138,84,.14)}
+.tile.now .big{color:var(--copper-hi)}
+
+/* ---------- bottom bar ---------- */
+.bar-b{position:absolute;left:56px;right:56px;top:956px;height:84px;border-radius:22px;background:rgba(255,255,255,.045);border:1px solid var(--line);display:flex;align-items:center}
+.bar-b img{height:52px;margin:0 26px 0 24px}
+.bar-b .sep{width:1px;align-self:stretch;margin:16px 0;background:var(--line)}
+.msgs{position:relative;flex:1;height:100%;overflow:hidden}
+.msg{position:absolute;inset:0;display:flex;align-items:center;padding:0 30px;font-size:31px;font-weight:500;color:#fff;opacity:0;transform:translateY(14px);transition:opacity .8s ease,transform .8s ease;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.msg.show{opacity:1;transform:none}
+.msg i{flex:none;width:12px;height:12px;border-radius:50%;background:var(--copper);margin-right:20px;font-style:normal}
+.contact{padding:0 28px;font-size:25px;color:var(--on-2);white-space:nowrap;text-align:right}
+.contact b{color:#fff;font-weight:600}
+.contact.off{color:var(--copper-hi);font-weight:600}
+
+/* ---------- prayer in progress ---------- */
+.overlay{position:absolute;inset:0;z-index:20;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;opacity:0;visibility:hidden;transition:opacity 1.2s ease,visibility 0s linear 1.2s;
+  background:radial-gradient(900px 600px at 50% 40%,#123E50 0%,rgba(18,62,80,0) 70%),#08202B}
+.overlay.show{opacity:1;visibility:visible;transition:opacity 1.2s ease,visibility 0s}
+.overlay svg{width:150px;height:150px;color:var(--copper)}
+.overlay .ar{font-family:var(--arabic);font-size:150px;line-height:1.2;color:var(--copper-hi);margin-top:10px}
+.overlay h1{font-family:var(--display);font-weight:600;font-size:96px;line-height:1.05;color:#fff;margin-top:4px}
+.overlay p{font-size:44px;line-height:1.4;color:var(--on-2);margin-top:34px;max-width:28ch}
+.overlay .foot{position:absolute;bottom:64px;left:0;right:0;font-size:34px;color:var(--on-3)}
+.overlay .foot b{font-family:var(--display);font-weight:600;color:var(--on);font-size:44px;margin-right:22px}
+
+.hint{position:absolute;left:50%;top:24px;transform:translateX(-50%);z-index:30;background:rgba(0,0,0,.6);color:#fff;font-size:22px;padding:10px 20px;border-radius:999px;opacity:0;transition:opacity .4s;pointer-events:none}
+.hint.show{opacity:1}
+@media (prefers-reduced-motion:reduce){.slide,.msg,.overlay,.tile{transition:none}}
+</style>
+</head>
+<body>
+<div id="stage" role="main" aria-label="Masjid Nuh prayer times screen">
+
+  <section class="left" aria-label="Time and date">
+    <div class="clock" id="clock" aria-live="off"></div>
+    <div class="dates">
+      <p class="greg" id="greg"></p>
+      <p class="hijri" id="hijri"></p>
+      <p class="hijri-ar" id="hijriAr" lang="ar"></p>
+    </div>
+    <div class="upnext" id="next">
+      <p class="next-label" id="nextLabel">&nbsp;</p>
+      <p class="count" id="count">&nbsp;</p>
+      <p class="next-sub" id="nextSub">&nbsp;</p>
+    </div>
+  </section>
+
+  <section class="slides" id="slides" aria-label="Notices">
+    <div class="progress" id="progress"></div>
+  </section>
+
+  <div class="strip">
+    <span id="stripL"></span>
+    <span class="jm" id="stripR"></span>
+  </div>
+  <section class="tiles" id="tiles" aria-label="Prayer times"></section>
+
+  <footer class="bar-b">
+    <img src="/assets/logo.png" alt="Masjid Nuh Fort Erie">
+    <span class="sep"></span>
+    <div class="msgs" id="msgs"></div>
+    <span class="sep"></span>
+    <div class="contact" id="contact"></div>
+  </footer>
+
+  <div class="overlay" id="overlay" aria-live="polite">
+    <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <rect x="15" y="5" width="18" height="38" rx="3.5"/><path d="M21 37h6"/><path d="M6 6l36 36"/>
+    </svg>
+    <p class="ar" id="ovAr" lang="ar"></p>
+    <h1 id="ovTitle"></h1>
+    <p id="ovText"></p>
+    <div class="foot"><b id="ovClock"></b><span id="ovSince"></span></div>
+  </div>
+  <div class="hint" id="hint">Double-click for full screen</div>
+</div>
+
+<script src="/js/masjid.js"></script>
+<script src="/js/qrcode.js"></script>
+<script>
+(function () {
+  'use strict';
+  const M = window.Masjid;
+  const $ = id => document.getElementById(id);
+  const params = new URLSearchParams(location.search);
+  const PREVIEW = params.has('preview');
+  const CACHE_KEY = 'masjid-nuh-tv-cache';
+  const TV_DEFAULTS = {
+    prayerScreen: { on: true, minutes: 10 }, jumuahMinutes: 45,
+    ticker: ['Please silence your phone inside the prayer hall.'],
+    donateSlide: { on: true, title: 'Support your masjid', link: 'https://donorchoice.ca/embedded/masjidnuh' },
+    hijriAdjust: 0, clock24: false
+  };
+
+  /* ---------- time (with ?at=2026-11-06T13:20 to preview another moment) ---------- */
+  let offset = 0;
+  const at = /^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2})(?::(\d{2}))?$/.exec(params.get('at') || '');
+  if (at) offset = M.zoned(+at[1], +at[2], +at[3], at[4] + ':' + at[5]).getTime() + (+(at[6] || 0)) * 1000 - Date.now();
+  const now = () => new Date(Date.now() + offset);
+
+  /* ---------- data ---------- */
+  let S = M.normalize(null), TV = { ...TV_DEFAULTS }, SLIDES = [], lastOk = Date.now(), started = Date.now();
+  function readCache() {
+    try { const c = JSON.parse(localStorage.getItem(CACHE_KEY)); if (c) { S = M.normalize(c.settings); TV = { ...TV_DEFAULTS, ...c.tv }; SLIDES = c.slides || []; lastOk = c.savedAt || Date.now(); } } catch (e) {}
+  }
+  function writeCache() {
+    try { localStorage.setItem(CACHE_KEY, JSON.stringify({ settings: S, tv: TV, slides: SLIDES, savedAt: lastOk })); } catch (e) {}
+  }
+  async function getJSON(url) {
+    const ctrl = new AbortController(); const t = setTimeout(() => ctrl.abort(), 8000);
+    try { const r = await fetch(url, { cache: 'no-store', signal: ctrl.signal }); return { status: r.status, body: r.ok ? await r.json() : null }; }
+    finally { clearTimeout(t); }
+  }
+  async function refresh() {
+    try {
+      const [a, b] = await Promise.all([getJSON('/api/settings'), getJSON('/api/tv')]);
+      if (a.status !== 200 && a.status !== 404) throw new Error('settings ' + a.status);
+      if (b.status !== 200) throw new Error('tv ' + b.status);
+      S = M.normalize(a.status === 200 ? a.body : null);
+      TV = { ...TV_DEFAULTS, ...b.body.settings };
+      SLIDES = b.body.slides || [];
+      lastOk = Date.now();
+      writeCache();
+      dayKey = ''; // rebuild today's times with the new settings
+      buildDeck();
+    } catch (e) { /* keep showing the last saved data */ }
+    render();
+  }
+
+  /* ---------- helpers ---------- */
+  const digits = s => String(s).replace(/\d/g, '<span class="d">$&</span>').replace(/:/g, '<span class="c">:</span>');
+  function hm(d) {
+    const p = M.parts(d);
+    if (TV.clock24) return String(p.hour).padStart(2, '0') + ':' + String(p.minute).padStart(2, '0');
+    const h = p.hour % 12 || 12; return h + ':' + String(p.minute).padStart(2, '0');
+  }
+  const ampm = d => (M.parts(d).hour < 12 ? 'am' : 'pm');
+  const hmFull = d => TV.clock24 ? hm(d) : hm(d) + ' ' + ampm(d);
+  function dur(ms) {
+    const s = Math.max(0, Math.ceil(ms / 1000)), h = Math.floor(s / 3600), m = Math.floor(s % 3600 / 60), x = s % 60;
+    return h ? `${h}:${String(m).padStart(2, '0')}:${String(x).padStart(2, '0')}` : `${m}:${String(x).padStart(2, '0')}`;
+  }
+  const esc = s => String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]);
+  function qrSvg(text) {
+    try {
+      const q = qrcode(0, 'M'); q.addData(text); q.make();
+      const n = q.getModuleCount(); let d = '';
+      for (let r = 0; r < n; r++) for (let c = 0; c < n; c++) if (q.isDark(r, c)) d += `M${c} ${r}h1v1h-1z`;
+      return `<svg viewBox="-2 -2 ${n + 4} ${n + 4}" shape-rendering="crispEdges" aria-hidden="true"><path fill="#10232D" d="${d}"/></svg>`;
+    } catch (e) { return ''; }
+  }
+  const HIJRI_EN = ['Muharram', 'Safar', 'Rabi al-Awwal', 'Rabi al-Thani', 'Jumada al-Ula', 'Jumada al-Akhirah', 'Rajab', 'Sha’ban', 'Ramadan', 'Shawwal', 'Dhu al-Qa’dah', 'Dhu al-Hijjah'];
+  function hijri(d, lang) {
+    const shifted = new Date(d.getTime() + (TV.hijriAdjust || 0) * 864e5);
+    try {
+      if (lang === 'ar') {
+        const f = new Intl.DateTimeFormat('ar-SA-u-ca-islamic-umalqura-nu-arab', { timeZone: M.TZ, day: 'numeric', month: 'long', year: 'numeric' }).format(shifted);
+        return f.replace(/\s?هـ$/, '') + ' هـ';
+      }
+      const p = {}; new Intl.DateTimeFormat('en-u-ca-islamic-umalqura-nu-latn', { timeZone: M.TZ, day: 'numeric', month: 'numeric', year: 'numeric' }).formatToParts(shifted).forEach(x => p[x.type] = x.value);
+      return `${p.day} ${HIJRI_EN[(+p.month) - 1]} ${String(p.year).replace(/\D/g, '')} AH`;
+    } catch (e) { return ''; }
+  }
+
+  /* ---------- prayer state ---------- */
+  let dayKey = '', today, tomorrow, todayIsFri = false, tomorrowIsFri = false;
+  function compute(t) {
+    const p = M.todayParts(t), key = M.ymd(p.y, p.m, p.d) + '|' + (S.updatedAt || '');
+    if (key === dayKey) return;
+    dayKey = key;
+    today = M.day(S, p.y, p.m, p.d); todayIsFri = p.weekday === 'Fri';
+    const n = M.addDays(p.y, p.m, p.d, 1);
+    tomorrow = M.day(S, n.y, n.m, n.d); tomorrowIsFri = new Date(Date.UTC(n.y, n.m - 1, n.d, 12)).getUTCDay() === 5;
+  }
+  /** What's happening right now: which day's times to show, which prayer is next, and the phase. */
+  function state(t) {
+    const screen = TV.prayerScreen && TV.prayerScreen.on ? TV.prayerScreen.minutes * 60e3 : 0;
+    for (const k of M.PRAYERS) {
+      if (k === 'dhuhr' && todayIsFri && today.jumuah.length) {
+        const kh = today.jumuah[0].at, end = kh.getTime() + TV.jumuahMinutes * 60e3;
+        if (t < kh) return { day: today, fri: true, k, phase: 'before-jumuah', target: kh };
+        if (t < end) return { day: today, fri: true, k, phase: 'jumuah', since: kh };
+        continue;
+      }
+      const A = today.adhan[k], I = today.iqamah[k];
+      if (t < A) return { day: today, fri: todayIsFri, k, phase: 'before-adhan', target: A, iq: I };
+      if (t < I) return { day: today, fri: todayIsFri, k, phase: 'before-iqamah', target: I };
+      if (screen && t < I.getTime() + screen) return { day: today, fri: todayIsFri, k, phase: 'prayer', since: I };
+    }
+    return { day: tomorrow, fri: tomorrowIsFri, k: 'fajr', phase: 'before-adhan', target: tomorrow.adhan.fajr, iq: tomorrow.iqamah.fajr, tomorrow: true };
+  }
+
+  /* ---------- tiles ---------- */
+  let tileKey = '';
+  function renderTiles(st, t) {
+    const d = st.day, fri = st.fri && d.jumuah.length;
+    const key = d.date + '|' + fri + '|' + TV.clock24 + '|' + (S.updatedAt || '');
+    if (key !== tileKey) {
+      tileKey = key;
+      $('tiles').innerHTML = M.ALL.map(k => {
+        if (k === 'sunrise') return `<div class="tile sun" data-k="sunrise"><div class="nm"><span class="en">Sunrise</span></div><div class="row"><span class="ar" lang="ar">${M.AR.sunrise}</span></div><div class="iq"><span class="big">${digits(hm(d.adhan.sunrise))}</span></div></div>`;
+        if (k === 'dhuhr' && fri) {
+          const kh = d.jumuah[0], pr = d.jumuah[1] || d.jumuah[0];
+          return `<div class="tile" data-k="dhuhr"><div class="nm"><span class="en">Jumu’ah</span><span class="ar" lang="ar">الجمعة</span></div>
+            <div class="row"><span class="lbl">${esc(kh.label)}</span><span class="ad">${digits(hm(kh.at))}</span></div>
+            <div class="iq"><span class="big">${digits(hm(pr.at))}</span><span class="lbl">${esc(d.jumuah[1] ? d.jumuah[1].label : 'Prayer')}</span></div></div>`;
+        }
+        return `<div class="tile" data-k="${k}"><div class="nm"><span class="en">${M.NAMES[k]}</span><span class="ar" lang="ar">${M.AR[k]}</span></div>
+          <div class="row"><span class="lbl">Adhan</span><span class="ad">${digits(hm(d.adhan[k]))}</span></div>
+          <div class="iq"><span class="big">${digits(hm(d.iqamah[k]))}</span><span class="lbl">Iqamah</span></div></div>`;
+      }).join('');
+    }
+    document.querySelectorAll('.tile').forEach(el => {
+      const k = el.dataset.k;
+      const passed = !st.tomorrow && (k === 'sunrise' ? d.adhan.sunrise <= t : M.PRAYERS.indexOf(k) < M.PRAYERS.indexOf(st.k));
+      el.classList.toggle('passed', passed);
+      el.classList.toggle('next', k === st.k && (st.phase === 'before-adhan' || st.phase === 'before-jumuah'));
+      el.classList.toggle('now', k === st.k && (st.phase === 'before-iqamah' || st.phase === 'prayer' || st.phase === 'jumuah'));
+    });
+
+    const label = st.tomorrow ? `Tomorrow’s prayer times, <b>${tomorrowWeekday()}</b>` : `Today’s prayer times`;
+    $('stripL').innerHTML = label;
+    const jm = (st.tomorrow ? tomorrow : today).jumuah;
+    const showJm = jm.length && !(fri);
+    $('stripR').innerHTML = showJm ? '<span>Jumu’ah every Friday</span>' + jm.map(j => `<span>${esc(j.label)}<b>${hmFull(j.at)}</b></span>`).join('') : '';
+  }
+  function tomorrowWeekday() { const t = now(); const p = M.todayParts(t); const n = M.addDays(p.y, p.m, p.d, 1); return new Date(Date.UTC(n.y, n.m - 1, n.d, 12)).toLocaleDateString('en-CA', { weekday: 'long', timeZone: 'UTC' }); }
+
+  /* ---------- left panel + overlay ---------- */
+  function renderLeft(st, t) {
+    const p = M.parts(t);
+    const main = TV.clock24 ? hm(t) : hm(t);
+    $('clock').innerHTML = digits(main) + `<span class="sec">${digits(String(p.second).padStart(2, '0'))}</span>` + (TV.clock24 ? '' : `<span class="ap">${ampm(t)}</span>`);
+    $('greg').textContent = t.toLocaleDateString('en-CA', { timeZone: M.TZ, weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' });
+    $('hijri').textContent = hijri(t, 'en');
+    $('hijriAr').textContent = hijri(t, 'ar');
+
+    const name = st.k === 'dhuhr' && st.fri && st.day.jumuah.length ? 'Jumu’ah' : M.NAMES[st.k];
+    const left = st.target ? st.target - t : 0;
+    let label = '', sub = '';
+    if (st.phase === 'before-adhan') { label = `<b>${name}</b> adhan in`; sub = `Iqamah at <b>${hmFull(st.iq)}</b>${st.tomorrow ? ' tomorrow' : ''}`; }
+    else if (st.phase === 'before-iqamah') { label = `<b>${name}</b> iqamah in`; sub = left <= 120e3 ? 'Please straighten the rows and fill the gaps.' : `Adhan was at <b>${hmFull(st.day.adhan[st.k])}</b>`; }
+    else if (st.phase === 'before-jumuah') { label = `<b>Jumu’ah</b> ${esc((st.day.jumuah[0].label || 'khutbah').toLowerCase())} in`; sub = st.day.jumuah[1] ? `${esc(st.day.jumuah[1].label)} at <b>${hmFull(st.day.jumuah[1].at)}</b>` : 'Please arrive early'; }
+    $('nextLabel').innerHTML = label || '&nbsp;';
+    $('count').innerHTML = st.target ? digits(dur(left)) : '&nbsp;';
+    $('nextSub').innerHTML = sub || '&nbsp;';
+    $('next').classList.toggle('urgent', st.phase === 'before-iqamah' && left <= 120e3);
+
+    const on = st.phase === 'prayer' || st.phase === 'jumuah';
+    $('overlay').classList.toggle('show', on);
+    if (on) {
+      const jum = st.phase === 'jumuah';
+      $('ovAr').textContent = jum ? 'الجمعة' : M.AR[st.k];
+      $('ovTitle').textContent = jum ? 'Jumu’ah khutbah in progress' : `${M.NAMES[st.k]} prayer in progress`;
+      $('ovText').textContent = jum ? 'Please silence your phone and listen to the khutbah.' : 'Please silence your phone, straighten the rows and fill the gaps.';
+      $('ovClock').innerHTML = digits(hm(t)) + (TV.clock24 ? '' : ' ' + ampm(t));
+      $('ovSince').textContent = `${jum ? 'Khutbah' : 'Iqamah'} began at ${hmFull(st.since)}`;
+    }
+  }
+
+  /* ---------- bottom bar ---------- */
+  let msgList = [], msgIdx = -1, msgTimer = null, msgSig = '';
+  function buildMessages() {
+    const list = [];
+    if (S.announcement && S.announcement.on && S.announcement.text) list.push(S.announcement.text);
+    (TV.ticker || []).forEach(x => x && list.push(x));
+    if (!list.length) list.push('Welcome to Masjid Nuh. Please silence your phone inside the prayer hall.');
+    const sig = JSON.stringify(list);
+    if (sig === msgSig) return;
+    msgSig = sig; msgList = list;
+    $('msgs').innerHTML = list.map(m => `<p class="msg"><i></i>${esc(m)}</p>`).join('');
+    msgIdx = -1; clearInterval(msgTimer); nextMsg();
+    if (list.length > 1) msgTimer = setInterval(nextMsg, 9000);
+  }
+  function nextMsg() {
+    const els = $('msgs').children; if (!els.length) return;
+    msgIdx = (msgIdx + 1) % els.length;
+    [...els].forEach((el, i) => el.classList.toggle('show', i === msgIdx));
+  }
+  function renderContact() {
+    const stale = Date.now() - lastOk > 10 * 60e3;
+    const el = $('contact');
+    el.classList.toggle('off', stale);
+    el.innerHTML = stale ? 'Offline. Showing the last saved times.' : `<b>${esc(location.host)}</b>&nbsp;&nbsp;(905) 966-2374`;
+  }
+
+  /* ---------- slides ---------- */
+  let deck = [], deckSig = '', cur = -1, slideTimer = null, layers = [];
+  function activeCustom() {
+    const p = M.todayParts(now()), d = M.ymd(p.y, p.m, p.d);
+    return SLIDES.filter(s => (!s.start || s.start <= d) && (!s.end || s.end >= d) && (s.kind === 'text' || s.image));
+  }
+  function buildDeck() {
+    const list = activeCustom().map(s => ({ ...s }));
+    if (TV.donateSlide && TV.donateSlide.on && TV.donateSlide.link) list.push({ id: 'donate', kind: 'text', title: TV.donateSlide.title || 'Support your masjid', body: 'Give to the mosque, sadaqah, zakat or our Qur’an classes. Scan the code with your phone’s camera.', link: TV.donateSlide.link, linkLabel: 'Scan to donate', seconds: 12 });
+    if (!list.length) list.push({ id: 'welcome', kind: 'welcome', seconds: 20 });
+    const sig = JSON.stringify(list.map(s => [s.id, s.kind, s.title, s.body, s.link, s.linkLabel, s.image, s.seconds]));
+    if (sig === deckSig) return;
+    const prev = deck, shownId = prev[cur] && prev[cur].id;
+    deckSig = sig; deck = list;
+    const still = deck.findIndex(x => x.id === shownId);
+    if (!slideTimer || prev.length <= 1 || still < 0) showSlide(prev.length <= 1 || still < 0 ? 0 : still + 1);
+    else cur = still; // carry on from the slide that's showing
+  }
+  function slideHtml(s) {
+    if (s.kind === 'welcome') return `<div class="welcome"><p class="ar" lang="ar">بِسْمِ اللَّهِ مَجْرَاهَا وَمُرْسَاهَا</p><p class="tr">“In the name of Allah be its course and its anchorage.”</p><p class="ref">Surah Hud 11:41</p><p class="hello">Welcome to Masjid Nuh, Fort Erie. Everyone is welcome.</p></div>`;
+    const qr = s.link ? `<div class="qr${s.kind === 'image' ? ' float' : ''}">${qrSvg(s.link)}<span>${esc(s.linkLabel || 'Scan for details')}</span></div>` : '';
+    if (s.kind === 'image') return `<div class="bg" style="background-image:url('${s.image}')"></div><img class="fg" src="${s.image}" alt="${esc(s.title || 'Notice')}">${qr}`;
+    return `<div class="tslide"><img class="mark" src="/assets/mark.png" alt=""><div class="txt"><div class="bar"></div><h2>${esc(s.title)}</h2>${s.body ? `<p>${esc(s.body)}</p>` : ''}</div>${qr}</div>`;
+  }
+  function preload(s) {
+    return new Promise(res => {
+      if (s.kind !== 'image') return res(true);
+      const im = new Image(); const t = setTimeout(() => res(false), 15000);
+      im.onload = () => { clearTimeout(t); res(true); }; im.onerror = () => { clearTimeout(t); res(false); };
+      im.src = s.image;
+    });
+  }
+  async function showSlide(i, tries = 0) {
+    clearTimeout(slideTimer); slideTimer = null;
+    if (!deck.length) return;
+    const idx = ((i % deck.length) + deck.length) % deck.length, s = deck[idx];
+    const ok = await preload(s);
+    if (!ok && tries < deck.length) return showSlide(idx + 1, tries + 1);
+    const el = document.createElement('div'); el.className = 'slide'; el.innerHTML = slideHtml(s);
+    $('slides').insertBefore(el, $('progress'));
+    requestAnimationFrame(() => requestAnimationFrame(() => el.classList.add('show')));
+    const old = layers; layers = [el];
+    old.forEach(o => { o.classList.remove('show'); setTimeout(() => o.remove(), 1300); });
+    cur = idx;
+    const ms = (s.seconds || 12) * 1000, bar = $('progress');
+    bar.style.transition = 'none'; bar.style.width = '0';
+    if (deck.length > 1) {
+      requestAnimationFrame(() => requestAnimationFrame(() => { bar.style.transition = `width ${ms}ms linear`; bar.style.width = '100%'; }));
+      slideTimer = setTimeout(() => showSlide(cur + 1), ms);
+    } else slideTimer = setTimeout(() => { buildDeck(); showSlide(0); }, 60e3);
+  }
+
+  /* ---------- main loop ---------- */
+  function render() {
+    const t = now();
+    compute(t);
+    const st = state(t);
+    renderTiles(st, t);
+    renderLeft(st, t);
+    renderContact();
+    buildMessages();
+  }
+  function tick() {
+    render();
+    const ms = 1000 - (Date.now() % 1000);
+    setTimeout(tick, ms + 5);
+  }
+
+  /* ---------- screen fitting, full screen, wake lock, daily reload ---------- */
+  function fit() { const s = Math.min(innerWidth / 1920, innerHeight / 1080); $('stage').style.transform = `translate(-50%,-50%) scale(${s})`; }
+  addEventListener('resize', fit);
+  if (!PREVIEW) {
+    document.addEventListener('dblclick', () => { if (document.fullscreenElement) document.exitFullscreen(); else document.documentElement.requestFullscreen().catch(() => {}); });
+    let idleT; const wake = () => { document.body.classList.remove('idle'); clearTimeout(idleT); idleT = setTimeout(() => document.body.classList.add('idle'), 3000); };
+    addEventListener('mousemove', wake); wake();
+    if (!document.fullscreenElement && innerHeight < screen.height - 40) { $('hint').classList.add('show'); setTimeout(() => $('hint').classList.remove('show'), 6000); }
+    let lock = null;
+    const getLock = async () => { try { if ('wakeLock' in navigator && document.visibilityState === 'visible') lock = await navigator.wakeLock.request('screen'); } catch (e) {} };
+    document.addEventListener('visibilitychange', getLock); getLock();
+    // Reload once a night (around 3:10 am) to pick up website updates
+    setInterval(() => { const p = M.parts(new Date()); if (p.hour === 3 && p.minute === 10 && Date.now() - started > 3600e3) location.reload(); }, 30e3);
+  }
+
+  readCache();
+  fit(); buildDeck(); tick();
+  refresh(); setInterval(refresh, PREVIEW ? 30e3 : 120e3);
+})();
+</script>
+</body>
+</html>

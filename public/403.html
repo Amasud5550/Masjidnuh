@@ -26,14 +26,17 @@ a:focus-visible{outline:3px solid #D08A54;outline-offset:3px}
   <img src="/assets/mark.png" alt="">
   <h1>This account isn’t an admin yet</h1>
   <p>You’re signed in as <b id="who">your Microsoft account</b>, but it hasn’t been given access to the Masjid Nuh dashboard.</p>
-  <p>Ask a masjid admin to add your email under Admins in the dashboard, then sign in again.</p>
+  <p id="how">Ask a masjid admin to give your account access, then sign in again.</p>
   <div class="row">
     <a class="primary" href="/auth/logout?next=/auth/login">Use a different account</a>
     <a class="ghost" href="/">Back to the website</a>
   </div>
 </main>
 <script>
-fetch('/api/me').then(r => r.json()).then(j => { if (j.signedIn) document.getElementById('who').textContent = j.email; }).catch(() => {});
+fetch('/api/me').then(r => r.json()).then(j => {
+  if (j.signedIn) document.getElementById('who').textContent = j.email;
+  if (j.accessMode === 'groups') document.getElementById('how').textContent = 'Access is limited to members of the masjid’s website admin group in Microsoft 365. Ask your Microsoft 365 admin to add you to that group, then use a different account or sign in again.';
+}).catch(() => {});
 </script>
 </body>
 </html>

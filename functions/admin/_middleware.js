@@ -14,7 +14,7 @@ export async function onRequest(context) {
     return new Response(null, { status: 302, headers: { Location: '/auth/login?next=' + encodeURIComponent(u.pathname + u.search), 'Cache-Control': 'no-store' } });
   }
   let ok = false;
-  try { ok = await isAdmin(env, s.email); } catch (e) {
+  try { ok = await isAdmin(env, s); } catch (e) {
     console.error(e);
     return messagePage('The dashboard can’t reach its database', 'Check that a D1 database is bound to this Pages project with the variable name DB.', { status: 500 });
   }

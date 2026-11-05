@@ -1,6 +1,7 @@
 import { getOAuthCookie, clearOAuthCookie, makeSession } from '../../lib/session.js';
 import { redeemCode } from '../../lib/microsoft.js';
 import { messagePage } from '../../lib/page.js';
+import { groupIds, groupMode, owners } from '../../lib/db.js';
 
 // GET /auth/callback  <-  Microsoft sends the person back here after sign-in
 export async function onRequestGet({ request, env }) {
@@ -28,8 +29,15 @@ export async function onRequestGet({ request, env }) {
     return messagePage('Microsoft couldn’t sign you in', 'Something went wrong while finishing sign-in. Try again, and if it keeps happening, check the Microsoft sign-in settings for this site.', { status: 502, primary: retry, secondary: home });
   }
 
+  // Keep only the allowed groups this person belongs to
+  const allowed = groupIds(env);
+  const grps = user.groups.filter(g => allowed.includes(g));
+  if (groupMode(env) && !grps.length && user.groupsOverflow && !owners(env).includes(user.email)) {
+    return messagePage('Your account is in too many groups', 'Microsoft didn’t send your group list because your account belongs to a very large number of groups. Ask your Microsoft 365 admin to set the app’s groups claim to “Groups assigned to the application”.', { status: 403, secondary: home });
+  }
+
   const headers = new Headers({ Location: saved.next || '/admin/', 'Cache-Control': 'no-store' });
-  headers.append('Set-Cookie', await makeSession(user, env.SESSION_SECRET));
+  headers.append('Set-Cookie', await makeSession({ email: user.email, name: user.name, grps }, env.SESSION_SECRET));
   headers.append('Set-Cookie', clearOAuthCookie());
   return new Response(null, { status: 302, headers });
 }
